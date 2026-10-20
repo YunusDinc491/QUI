@@ -300,6 +300,15 @@
 - **Sorun / çözüm:** `git config user.email` değeri `ynsdinc333gmail.com` (`@` eksik) görüldü; commit atılmadan önce kullanıcıya bildirilecek.
 - **Sıradaki adım:** Derleme bitince APK'yı emülatöre kur; kullanıcı Google/e-posta girişini dener; ben sunucu/veritabanı ile doğrularım; sonra commit'ler.
 
+### 2026-10-20 23:43 — Firebase kipi yeniden derlendi/kuruldu; ilk 5 git commit'i atıldı
+- **Faz:** Faz 1 — Giriş ve profil
+- **Ne yapıldı:** (1) `flutter build apk --debug --dart-define=AUTH=firebase` yenilenen `google-services.json` ile yeniden çalıştırıldı → "Built ... app-debug.apk", `BUILD_EXIT=0` (Gradle 20,5 sn, artımlı). Derleme çıktısı `build/app/generated/res/processDebugGoogleServices/values/values.xml` içinde `default_web_client_id`, `google_app_id`, `project_id`, `gcm_defaultSenderId` üretildiği görüldü. APK emülatöre `install -r` ile kuruldu ("Success"), uygulama açıldı: **giriş ekranı Firebase kipinde** ("(Geliştirme)" alanı yok). (2) **Git:** kullanıcı "ilerleyebildiğimiz kadar ilerleyip commit öyle atıcaz" dedi → commit'ler atıldı. Önce `git config user.email` değerinin **`ynsdinc333gmail.com`** (`@` eksik) olduğu görüldü; **yalnızca bu depo için** (`git config --local`) `user.name=yunusdinc`, `user.email=ynsdinc333@gmail.com` ayarlandı (küresel ayara dokunulmadı). Commit'e girecek 134 dosya taranmadı-gizli dosya yok: `.env`, anahtar/keystore/servis hesabı/`local.properties` yok (yasaklı desen araması boş; tek eşleşme `login_screen.dart` içindeki `final _password = TextEditingController();` yanlış alarmıydı). Commit'ler: `241baf3` kurallar+docs+hook, `60a5905` depo temeli (.gitignore/.env.example/compose), `540b66e` backend, `9e7ee94` admin-web, `588000a` mobil (`google-services.json` dahil: içindeki API anahtarı Firebase'in herkese açık tanımlayıcısı).
+- **Neden:** Kullanıcı commit istedi; ilerleyebildiğimiz nokta, gerçek hesapla giriş denemesinin kullanıcıya kalması.
+- **Değişen dosyalar:** Yok (yalnızca git geçmişi ve repo-yerel git ayarı). Bu kayıt 6. commit'te.
+- **Doğrulama:** `git log --oneline` 5 commit gösterdi; `git status --short` temiz (0 değişiklik). Commit mesajlarına `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>` eklendi. CRLF uyarıları (Windows satır sonu) yalnızca bilgi. **Henüz doğrulanmadı:** gerçek Firebase hesabıyla giriş (kullanıcı emülatörde deneyecek).
+- **Sorun / çözüm:** Küresel git e-postasındaki yazım hatası repo-yerel ayarla aşıldı; kullanıcıya bildirilecek (isterse `git config --global user.email ynsdinc333@gmail.com` ile düzeltebilir).
+- **Sıradaki adım:** Kullanıcı emülatörde Google ve/veya e-posta ile giriş yapar; ben sunucu günlüğü/veritabanıyla doğrularım (gerçek Firebase jetonu backend'de kabul edildi mi, kullanıcı satırı oluştu mu). Sonra Faz 1 kabulü.
+
 <!-- KAYIT-SONU -->
 
 ---
@@ -312,5 +321,5 @@
 - **Çalışan yerel ortam:** Docker'da `senbilirsin-postgres-1` (5433) ve `senbilirsin-redis-1` (6380); emülatör `senbilirsin_pixel` açık; uygulamanın tarayıcı panelinde `mobile-api` (5080) ve `flutter-web` (5174) çalışıyor olabilir.
 - **Dikkat:** C: sürücüsü %98 dolu (13 GB boş); büyük yeni indirmeler öncesi kontrol et.
 - Kullanıcının yapacakları: Play Console hesabı, Firebase/Cloudflare/Railway/GitHub hesapları (ilgili fazlarda).
-- Henüz git commit atılmadı (kullanıcı "commit at" diyince).
+- Git: 5 commit atıldı (+ bu günlük güncellemesi 6. commit); repo-yerel git kimliği `yunusdinc <ynsdinc333@gmail.com>`. Sonraki commit'ler kullanıcı isteyince.
 - Yeni oturumda: Stop hook'unun gerçekten tetiklendiği gözlemlenecek; kabuk `cd` ile kayarsa hook göreli yolu bozulabilir (bilinen zayıflık).
