@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SenBilirsin.AdminApi/SenBilirsin.AdminApi.csproj" />
+    <Project Path="src/SenBilirsin.MobileApi/SenBilirsin.MobileApi.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/">
+    <Project Path="src/Modules/SenBilirsin.Modules.Administration/SenBilirsin.Modules.Administration.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Ads/SenBilirsin.Modules.Ads.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Catalog/SenBilirsin.Modules.Catalog.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.MatchEngine/SenBilirsin.Modules.MatchEngine.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Matchmaking/SenBilirsin.Modules.Matchmaking.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Notifications/SenBilirsin.Modules.Notifications.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Questions/SenBilirsin.Modules.Questions.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Store/SenBilirsin.Modules.Store.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Support/SenBilirsin.Modules.Support.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Tournament/SenBilirsin.Modules.Tournament.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Users/SenBilirsin.Modules.Users.csproj" />
+    <Project Path="src/Modules/SenBilirsin.Modules.Wallet/SenBilirsin.Modules.Wallet.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SenBilirsin.Tests/SenBilirsin.Tests.csproj" />
+  </Folder>
+</Solution>

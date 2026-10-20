@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Administration\SenBilirsin.Modules.Administration.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Ads\SenBilirsin.Modules.Ads.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Catalog\SenBilirsin.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.MatchEngine\SenBilirsin.Modules.MatchEngine.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Matchmaking\SenBilirsin.Modules.Matchmaking.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Notifications\SenBilirsin.Modules.Notifications.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Questions\SenBilirsin.Modules.Questions.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Store\SenBilirsin.Modules.Store.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Support\SenBilirsin.Modules.Support.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Tournament\SenBilirsin.Modules.Tournament.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Users\SenBilirsin.Modules.Users.csproj" />
+    <ProjectReference Include="..\Modules\SenBilirsin.Modules.Wallet\SenBilirsin.Modules.Wallet.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
