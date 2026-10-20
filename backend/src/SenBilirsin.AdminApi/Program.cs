@@ -15,7 +15,7 @@ app.UseCors();
 
 // Railway / uptime izleme için sağlık ucu
 app.MapHealthChecks("/health");
-app.MapGet("/", () => "SenBilirsin AdminApi");
+app.MapGet("/", () => "QU¿ AdminApi");
 
 app.Run();
 

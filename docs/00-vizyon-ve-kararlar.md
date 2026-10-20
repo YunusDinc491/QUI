@@ -5,7 +5,7 @@
 
 ## 1. Ürün
 
-**SenBilirsin**: Türkçe, mobil bir bilgi yarışması oyunu. Bireysel ya da rakipli oynanır. Rakip rastgele bulunur, arkadaş daveti ile gelir ya da kullanıcı isterse bot olur. Kazanılan puan 2 günlük turnuva sıralamasını belirler; sıralamada ilk 10'a girenler "hediye puanı" kazanır. Hediye puanı ile mağazadan gerçek ödül (hediye kartı/kupon kodu gibi), joker, avatar ve avatar çerçevesi alınır. Gelir kaynağı ödüllü reklamdır.
+**QU¿**: Türkçe, mobil bir bilgi yarışması oyunu. Bireysel ya da rakipli oynanır. Rakip rastgele bulunur, arkadaş daveti ile gelir ya da kullanıcı isterse bot olur. Kazanılan puan 2 günlük turnuva sıralamasını belirler; sıralamada ilk 10'a girenler "hediye puanı" kazanır. Hediye puanı ile mağazadan gerçek ödül (hediye kartı/kupon kodu gibi), joker, avatar ve avatar çerçevesi alınır. Gelir kaynağı ödüllü reklamdır.
 
 İlk yayın: **yalnızca Android**, **yalnızca Türkçe**. Çevredeki insanlardan gelen geri bildirimle güncellenerek ilerlenir; maliyetli kısımlar (iOS vb.) sonra eklenir.
 
@@ -15,7 +15,7 @@
 
 | No | Karar | Ayrıntı |
 |---|---|---|
-| K-01 | Uygulama adı **SenBilirsin**; logo henüz yok | — |
+| K-01 | Uygulama adı **QU¿** (ASCII okunuşu "QUI"; yazıda her yerde "QU¿"). Kod ve kimlik adları bilerek aynı kalır: `com.senbilirsin.app` (K-56), `SenBilirsin.*` namespace/klasör adları, Firebase proje kimliği `senbilirsin-832b8`. Logo henüz yok (tasarım en sona, K-53) | — |
 | K-02 | Mobil: **Flutter**, ilk sürüm Android | 02 |
 | K-03 | Backend: **C# .NET 10 modüler monolit** | 02 |
 | K-04 | Veritabanı: **PostgreSQL** | 03 |
@@ -69,7 +69,7 @@
 | K-52 | **Her joker türü bir maçta bir kez** kullanılabilir (3 tür → en çok 3 joker/maç); soru başına en fazla bir joker kuralı da geçerli | 01 |
 | K-53 | **Tasarım en sona**: önce tüm işlevler (faz 0–8) çalışan, elle test edilebilir iskelet/ham arayüzle yapılır (varsayılan Material tema); tasarım her şey çalışınca başlar | 06, 09 |
 | K-54 | Kullanıcının Android telefonu yok → test **Android emülatörüyle** yapılır | 11 |
-| K-56 | Android **uygulama kimliği (paket adı): `com.senbilirsin.app`**. Alan adı büyük olasılıkla `senbilirsin.com` olacak (henüz alınmadı; kesinleşince/alınınca işlenir, davet bağlantısı faz 4) | 10, 11 |
+| K-56 | Android **uygulama kimliği (paket adı): `com.senbilirsin.app`**. Alan adı büyük olasılıkla `senbilirsin.com` olacaktı (henüz alınmadı; davet bağlantısı faz 4) — **uygulama adı QU¿ olunca bu varsayım geçerliliğini yitirdi, alan adı yeniden belirlenecek (A-12)** | 10, 11 |
 | K-55 | **Yerel önizleme**: kullanıcı uygulamayı bilgisayarda görüp kullanabilmeli. Ana test ortamı **Android emülatörü** (masaüstünde pencere); hızlı önizleme için **Flutter web** (uygulamanın tarayıcı panelinde). Web yalnızca geliştirme önizlemesidir, yayın hedefi değildir; yalnızca mobilde çalışan eklentiler (AdMob vb.) soyutlama arkasında web'de sahte/pasif olur | 09, 11 |
 
 ## 3. Kapsam dışı (ilk sürümde YOK)
@@ -94,3 +94,4 @@ iOS ve Apple ile giriş · kendi fotoğrafını profil resmi yapma · ani/ara re
 | 2026-10-20 | Maç başına joker limiti belirsizdi (öneri: toplam 2) | **Her joker türü maçta bir kez** (K-52) | Kullanıcı kararı (A-02) |
 | 2026-10-20 | Tasarım konuşmasının zamanı belirsizdi (öneri: faz 0 sonu / faz 1 başı) | **Tasarım en sona**, önce çalışan ham iskelet (K-53) | Kullanıcı kararı (A-13) |
 | 2026-10-20 | Test cihazı bilinmiyordu | Android telefon yok, **emülatör** (K-54) | Kullanıcı yanıtı (A-15) |
+| 2026-10-20 | Uygulama adı **SenBilirsin** (K-01) | Uygulama adı **QU¿**; yazılış her yerde QU¿. Paket kimliği (`com.senbilirsin.app`) ve dahili adlar (`SenBilirsin.*`) **aynı kalır** | Kullanıcı kararı (soruldu: paket kimliği, dahili adlar, yazılış) |

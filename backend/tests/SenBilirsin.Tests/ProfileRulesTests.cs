@@ -25,6 +25,7 @@ public class ProfileRulesTests
     [InlineData("ali veli", "USERNAME_INVALID_CHARS")]
     [InlineData("admin", "USERNAME_RESERVED")]
     [InlineData("SenBilirsin", "USERNAME_RESERVED")]
+    [InlineData("QUI", "USERNAME_RESERVED")]
     [InlineData("orospu", "USERNAME_PROFANE")]
     [InlineData("s1ktir", "USERNAME_PROFANE")]
     [InlineData(null, "USERNAME_TOO_SHORT")]

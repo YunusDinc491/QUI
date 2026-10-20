@@ -19,7 +19,7 @@ class SenBilirsinApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Faz 0-8: varsayılan Material tema; tasarım en sona bırakıldı (K-53).
     return MaterialApp(
-      title: 'SenBilirsin',
+      title: 'QU¿',
       navigatorKey: _navigatorKey,
       theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
       home: AppRoot(controller: controller, navigatorKey: _navigatorKey),

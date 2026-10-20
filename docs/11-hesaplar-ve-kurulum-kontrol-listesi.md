@@ -74,3 +74,5 @@ Gizlilik politikası ve koşullar (taslağı Claude hazırlar) · turnuva/ödül
 6. Yayın sürümü için (Faz 9) ayrıca **yayın anahtarının SHA-1'i** eklenecek; Play App Signing kullanılırsa Play Console'daki SHA-1 de eklenir.
 
 Çalıştırma: `flutter run --dart-define=AUTH=firebase` ya da APK derlerken `--dart-define=AUTH=firebase`. Bu bayrak yoksa uygulama geliştirme kimliğiyle (DevAuth) çalışır.
+
+> **Not (2026-10-20):** Uygulama adı **QU¿** oldu (K-01). Firebase konsolundaki proje adı ve uygulama takma adı "SenBilirsin" olarak kaldı (işlevsel bir etkisi yok; istersen konsoldan görünen adı değiştirebilirsin). Proje kimliği `senbilirsin-832b8` ve paket adı `com.senbilirsin.app` **değişmez**.

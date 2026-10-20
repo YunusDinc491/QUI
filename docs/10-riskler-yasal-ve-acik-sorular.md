@@ -15,7 +15,7 @@
 | A-09 | Joker başlangıç sayısı, ipucu olasılığı, yeni hesap hediyesi | Yayın öncesi yeniden düzenlenecek (kullanıcı notu) |
 | A-10 | Fan modunda takım/dizi logosu kullanımı (telif) | Görsel kararı tasarım aşamasında |
 | A-11 | Ödüllerde yaş sınırı (18+?) | Yasal araştırmadan sonra |
-| A-12 | Alan adı seçimi | Büyük olasılıkla **senbilirsin.com** (kullanıcı, 2026-10-20; henüz alınmadı, kesinleşince alınır). Faz 4'te |
+| A-12 | Alan adı seçimi | Önceki varsayım `senbilirsin.com` idi; **uygulama adı QU¿ olunca geçerliliğini yitirdi**. Yeni alan adı kullanıcıyla belirlenecek (henüz alınmadı). Faz 4'te |
 | A-13 | Görsel tasarım konuşmasının zamanı | **ÇÖZÜLDÜ (2026-10-20):** tasarım en sona; önce çalışan ham iskelet (K-53) |
 | A-14 | Bot maçında bağlantı kopmasının insan maçıyla aynı sonuçlanması (kayıp) kararı, bot **artık gizli olmadığı** için gözden geçirilmeli mi? | Kayıtlı karar geçerli (K-25 uyarınca insan maçıyla aynı); yalnızca bilgi notu |
 | A-16 | Android uygulama kimliği (paket adı) | **ÇÖZÜLDÜ (2026-10-20):** `com.senbilirsin.app` (K-56). Yayından sonra değiştirilemez |
@@ -41,6 +41,7 @@
 | **Telif** (Fan modu logoları, kategori adları) | Mağaza/marka sorunu | Tasarım aşamasında karar |
 | **Google Play yeni hesap kapalı test şartı** | Yayın gecikmesi | Hesabı erken aç, şartı güncel kaynaktan teyit et |
 | **Hobby plan sınırları** | Kaynak yetersizliği | İzle, gerekirse yükselt |
+| **Mağaza adında "QU¿"**: Google Play uygulama adı kurallarında özel karakter/noktalama kısıtı olabilir; "¿" arama ve görünürlüğü de etkileyebilir | Yayında ad reddi veya bulunabilirlik sorunu | Yayın öncesi (Faz 9) Play Console'da ad doğrulanır; gerekirse mağaza adı "QUI", uygulama içi/ikon etiketi "QU¿" olur (kullanıcıya sorulur) |
 | **Flutter "Built-in Kotlin" geçişi:** `firebase_auth` ve `firebase_core` Kotlin Gradle Eklentisi (KGP) uyguluyor; Flutter ileride bunu reddedecek (derleme uyarısı, 2026-10-20) | İleride Flutter/AGP güncellemesinde Android derlemesi kırılabilir | Paket güncellemeleri izlenir; Flutter sürümü bilerek yükseltilir, güncellemeden önce derleme denenir |
 
 ## 3. Yasal / vergi araştırma listesi (yayın öncesi)

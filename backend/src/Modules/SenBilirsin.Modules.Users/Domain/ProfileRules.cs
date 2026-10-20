@@ -21,7 +21,7 @@ public static partial class ProfileRules
 
     private static readonly HashSet<string> ReservedUsernames =
     [
-        "admin", "administrator", "moderator", "senbilirsin", "destek", "support", "bot", "sistem", "system", "root",
+        "admin", "administrator", "moderator", "senbilirsin", "qui", "destek", "support", "bot", "sistem", "system", "root",
     ];
 
     [GeneratedRegex("^[a-z0-9_]+$")]

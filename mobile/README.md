@@ -1,6 +1,6 @@
-# senbilirsin
+# QU¿
 
-SenBilirsin bilgi yarismasi
+QU¿ bilgi yarışması
 
 ## Getting Started
 

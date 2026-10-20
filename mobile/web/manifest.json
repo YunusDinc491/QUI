@@ -1,11 +1,11 @@
 {
-    "name": "senbilirsin",
-    "short_name": "senbilirsin",
+    "name": "QU¿",
+    "short_name": "QU¿",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "SenBilirsin bilgi yarismasi",
+    "description": "QU¿ bilgi yarışması",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

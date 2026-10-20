@@ -40,7 +40,7 @@ app.UseAuthorization();
 
 // Railway / uptime izleme için sağlık ucu
 app.MapHealthChecks("/health");
-app.MapGet("/", () => "SenBilirsin MobileApi");
+app.MapGet("/", () => "QU¿ MobileApi");
 
 // Uygulama açılışında: zorunlu güncelleme (min sürüm) ve bakım modu (docs/02). Şimdilik ayar dosyasından;
 // admin panelinden yönetilecek hale Faz 8'de gelir.

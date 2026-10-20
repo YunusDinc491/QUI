@@ -309,6 +309,43 @@
 - **Sorun / çözüm:** Küresel git e-postasındaki yazım hatası repo-yerel ayarla aşıldı; kullanıcıya bildirilecek (isterse `git config --global user.email ynsdinc333@gmail.com` ile düzeltebilir).
 - **Sıradaki adım:** Kullanıcı emülatörde Google ve/veya e-posta ile giriş yapar; ben sunucu günlüğü/veritabanıyla doğrularım (gerçek Firebase jetonu backend'de kabul edildi mi, kullanıcı satırı oluştu mu). Sonra Faz 1 kabulü.
 
+### 2026-10-20 23:48 — Uygulama adı değişikliği, Parça 1/4: kararlar ve belgeler (QU¿)
+- **Faz:** Faz 1 (ad değişikliği)
+- **Ne yapıldı:** Kullanıcı "uygulamanın adı QUI olacak, görünüşü QU¿" dedi. Kapsamı belirlemek için üç soru soruldu ve yanıtlandı: (a) paket kimliği `com.senbilirsin.app` **aynı kalsın**, (b) dahili adlar (`SenBilirsin.*` klasör/namespace/proje) **aynı kalsın**, (c) yazılış **her yerde "QU¿"** (belgeler dahil). Parça 1: **K-01** güncellendi (`docs/00`: ürün tanımı, K-01 satırı, karar değişiklik günlüğüne satır); K-56'daki "senbilirsin.com" varsayımı **geçerliliğini yitirdi** diye işaretlendi (alan adı yeniden belirlenecek, A-12 güncellendi); `docs/10`'a risk satırı eklendi (mağaza adında "¿" özel karakteri Play'de sorun çıkarabilir; Faz 9'da doğrulanacak); `docs/11`'e not (Firebase konsolundaki adlar "SenBilirsin" kalır, işlevsel etkisi yok); `CLAUDE.md` başlığı ve proje özeti güncellendi. **Ayrıca kullanıcının talimatı kalıcı kural yapıldı:** `CLAUDE.md` §5'e "Küçük parçalar" kuralı (iş küçük parçalara bölünür, her parça yap→doğrula→yaz→anlat; kullanıcıya düşen işler en sona bırakılır ve sonda tek listede verilir). `docs/ilerleme.md` eski kayıtları, append-only kuralı gereği **değiştirilmedi** (eski kayıtlarda "SenBilirsin" adı geçmeye devam eder).
+- **Neden:** Kullanıcı kararı; K-01 md'deki kararı değiştirdiği için (CLAUDE.md §1) onay soruldu ve karar günlüğüne yazıldı.
+- **Değişen dosyalar:** `docs/00-vizyon-ve-kararlar.md`, `docs/10-riskler-yasal-ve-acik-sorular.md`, `docs/11-hesaplar-ve-kurulum-kontrol-listesi.md`, `CLAUDE.md`.
+- **Doğrulama:** Düzenleme betiği her değişiklik için "tamam" döndürdü (8/8, "BULUNAMADI" yok); `docs/11` notu `cat >>` ile eklendi. Belgelerde "SenBilirsin" yalnızca kimlik/yol bağlamında (namespace, klasör, paket adı, Firebase proje adı/kimliği) ve eski günlük kayıtlarında kaldı.
+- **Sorun / çözüm:** Yok.
+- **Sıradaki adım:** Parça 2: mobil uygulamadaki görünen adlar (Android ikon etiketi, giriş ekranı başlığı, uygulama başlığı, çevrimdışı mesajı, web başlığı/manifest, README/pubspec açıklaması).
+
+### 2026-10-20 23:50 — Uygulama adı değişikliği, Parça 2/4: mobil uygulamadaki görünen adlar
+- **Faz:** Faz 1 (ad değişikliği)
+- **Ne yapıldı:** Mobil projede kullanıcıya görünen ad **QU¿** yapıldı: Android ikon etiketi (`AndroidManifest.xml` `android:label="QU¿"`), uygulama başlığı (`app_root.dart` `MaterialApp.title`), giriş ekranı başlığı (`login_screen.dart`), çevrimdışı ekranındaki metin (ekleme gerektiren "SenBilirsin'i" yerine ek almayan "Oynamak için internete bağlı olmalısın…" — "QU¿" sonuna Türkçe ek getirmek okunuşta tuhaf olduğu için cümle yeniden kuruldu), `pubspec.yaml` ve `README.md` açıklaması, web `index.html` başlığı/açıklaması, `manifest.json` adı. **Değişmeyenler (bilerek):** Dart sınıf adı `SenBilirsinApp`, paket adı `senbilirsin` (pubspec `name`), `com.senbilirsin.app`.
+- **Neden:** Kullanıcı kararı (K-01); paket kimliği ve dahili adlar aynı kalacak.
+- **Değişen dosyalar:** `mobile/android/app/src/main/AndroidManifest.xml`, `mobile/lib/app/app_root.dart`, `mobile/lib/screens/login_screen.dart`, `mobile/lib/screens/status_screens.dart`, `mobile/pubspec.yaml`, `mobile/README.md`, `mobile/web/index.html`, `mobile/web/manifest.json`.
+- **Doğrulama:** `flutter analyze` → "No issues found!"; `flutter test` → "All tests passed!" (20 test). `grep` ile mobilde kimlik olmayan "SenBilirsin" geçişi kalmadığı görüldü. İlk denemede betik bir değişikliği bulamadı (Dart dizesindeki `\'` kaçışı); dosya doğrudan düzenlenerek giderildi. **Henüz doğrulanmadı:** ¿ karakterinin telefonda ikon etiketinde ve ekranda doğru çizilmesi (Parça 4'te emülatörde bakılacak).
+- **Sorun / çözüm:** Yukarıda.
+- **Sıradaki adım:** Parça 3: admin-web başlıkları, backend kök metinleri, ayrılmış kullanıcı adlarına "qui" eklenmesi ve testi.
+
+### 2026-10-20 23:53 — Uygulama adı değişikliği, Parça 3/4: admin-web ve backend metinleri
+- **Faz:** Faz 1 (ad değişikliği)
+- **Ne yapıldı:** Admin panelinin sekme başlığı ve ana başlığı "QU¿ Yönetim" / "QU¿ Yönetim Paneli" yapıldı; MobileApi ve AdminApi kök yanıt metinleri "QU¿ MobileApi" / "QU¿ AdminApi" yapıldı; kullanıcı adı için **ayrılmış adlara "qui" eklendi** (`ProfileRules.ReservedUsernames`), birim testine `QUI` eklendi (kimse bu adı kayıt sırasında alamasın).
+- **Neden:** Kullanıcı kararı (K-01); ad kapma/taklit önlemi için marka adı ayrılmış listeye alındı (daha önce "senbilirsin" de vardı).
+- **Değişen dosyalar:** `admin-web/index.html`, `admin-web/src/App.tsx`, `backend/src/SenBilirsin.MobileApi/Program.cs`, `backend/src/SenBilirsin.AdminApi/Program.cs`, `backend/src/Modules/SenBilirsin.Modules.Users/Domain/ProfileRules.cs`, `backend/tests/SenBilirsin.Tests/ProfileRulesTests.cs`.
+- **Doğrulama:** `dotnet build` → 0 uyarı 0 hata; `dotnet test` → **"Başarılı! Başarısız: 0, Başarılı: 77"** (önceki 76 + yeni `QUI` durumu); admin-web `npm run build` → "built in 777ms", `npm run lint` çıkış kodu 0. Derlemeden önce `mobile-api` önizleme sunucusu durduruldu (dosya kilidi); Parça 4'te yeniden başlatılacak.
+- **Sorun / çözüm:** Yok.
+- **Sıradaki adım:** Parça 4: sunucuyu yeniden başlat, Firebase kipinde APK'yı yeniden derle, emülatöre kur, ¿ karakterinin etiketde ve ekranda doğru göründüğünü doğrula.
+
+### 2026-10-20 23:58 — Uygulama adı değişikliği, Parça 4/4: derleme, emülatör doğrulaması; yol haritası belgeye yazıldı
+- **Faz:** Faz 1 (ad değişikliği)
+- **Ne yapıldı:** (1) `mobile-api` yeniden başlatıldı; `flutter build apk --debug --dart-define=AUTH=firebase` → "Built ... app-debug.apk", `BUILD_EXIT=0` (Gradle 95,7 sn). (2) APK'nın içinden etiket okundu (`aapt2 dump badging`): `package: name='com.senbilirsin.app'`, **`application-label:'QU¿'`**. (3) APK emülatöre kuruldu ("Success"), `force-stop` + yeniden açıldı. Açılış bu kez 35 sn sürdü (`ActivityTaskManager: Displayed ... +35s214ms`; emülatör yük altında); ardından giriş ekranı göründü ve **başlık "QU¿" olarak doğru çizildi** (ekran görüntüsü). (4) `docs/09` sonuna **"Çalışma planı ve iş paylaşımı"** bölümü eklendi: Claude'un şimdi yapabileceği parçalar (Faz 1 kalan, 2.1–2.8, 3–9) ve kaba süre tahminleri, kullanıcının işlerinin tek listesi (en sonda): gerçek giriş denemesi, hesaplar, içerik, yasal/vergi, kararlar.
+- **Neden:** Kullanıcı sıradaki aşamaların ve ne kadarının şimdi yapılabileceğinin anlatılmasını, kendi işlerinin en sona bırakılmasını ve Claude'un işlerinin küçük parçalara bölünüp adım adım yapılmasını istedi.
+- **Değişen dosyalar:** `docs/09-gelistirme-fazlari.md` (çalışma planı bölümü), `docs/ilerleme.md`. Derleme çıktıları git dışı.
+- **Doğrulama:** `aapt2` çıktısı ve emülatör ekran görüntüsü (yukarıda). Önceki parçalarda: `flutter analyze` temiz, 20 Flutter testi, backend **77/77**, admin-web build/lint tamam. **Henüz doğrulanmadı:** launcher'daki ikonun altında etiketin görünmesi (yalnızca APK etiketi okundu; ana ekran/çekmece ekran görüntüsü alınmadı); gerçek hesapla giriş (kullanıcıda).
+- **Sorun / çözüm:** Emülatör soğuk açılışı yavaş (35 sn); uygulama hatası değil, logcat'te çökme/hata yok.
+- **Durum:** Ad değişikliği tamamlandı; değişiklikler **commit edilmedi** (kullanıcı istediğinde atılacak).
+- **Sıradaki adım:** Faz 2, Parça 2.1: Katalog modülü (mod/alt dal tabloları, 4 mod tohumu, yayındaki kategoriler ucu, testler).
+
 <!-- KAYIT-SONU -->
 
 ---

@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('SenBilirsin', style: Theme.of(context).textTheme.headlineLarge, textAlign: TextAlign.center),
+                  Text('QU¿', style: Theme.of(context).textTheme.headlineLarge, textAlign: TextAlign.center),
                   const SizedBox(height: 4),
                   Text(_registerMode ? 'Hesap oluştur' : 'Giriş yap', textAlign: TextAlign.center),
                   if (c.notice != null) ...[

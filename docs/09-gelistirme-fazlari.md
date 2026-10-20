@@ -32,3 +32,32 @@
 |---|---|---|
 | 0 — İskelet | **Kabul edildi (2026-10-20, kullanıcı)** | Yerel iskelet tamam ve doğrulandı (API'ler, admin-web, Flutter emülatör + web, Postgres/Redis, SignalR echo). **Ertelenenler:** Railway (staging), Cloudflare Pages, GitHub deposu ve otomatik deploy — kullanıcı hesapları açılınca yapılacak (kabul kriterindeki "staging'de /health" ve "admin-web yayında" maddeleri bu yüzden henüz karşılanmadı, kullanıcı bunu bilerek kabul etti). |
 | 1 — Giriş ve profil | **Devam ediyor (2026-10-20)** | **Tamam ve doğrulandı:** backend (Users modülü, PostgreSQL, kurallar, uçlar, tek cihaz, hesap silme; 65 test) ve mobil ekranların tamamı **geliştirme kimliğiyle (DevAuth)** — emülatörde ve tarayıcıda elle denendi. **Uygulama kimliği `com.senbilirsin.app` (K-56).** `FirebaseAuthGateway` yazıldı, derleniyor ve Firebase jeton doğrulaması (backend) sahte imzalı jetonlarla test edildi (76 test). **Kalan:** gerçek **Firebase projesi** (kullanıcı: docs/11 §6) → `google-services.json` + proje kimliği geldikten sonra gerçek giriş denenip Faz 1 kabulü. |
+
+## Çalışma planı ve iş paylaşımı (2026-10-20, kullanıcı talimatı)
+
+**Kural:** Claude'un yapabildiği her şey önce, **küçük parçalar** halinde yapılır (her parça: yap → doğrula → ilerlemeye yaz → kısaca anlat). Kullanıcıya düşen işler **en sona** bırakılır ve tek listede toplanır. Dış hizmet gerektiren yerlerde (R2, AdMob, FCM, deploy) önce yerel/test karşılığı yazılır (arayüz arkasında), gerçek hesap gelince yalnızca ayar değişir.
+
+### Claude'un yapacakları (şimdi yapılabilir, sırayla)
+
+| Faz | Parçalar (her biri ayrı doğrulanır) | Tahmini çalışma* |
+|---|---|---|
+| **1 (kalan)** | Ad değişikliği (QU¿) bitirme; Faz 1 kabulü kullanıcının gerçek giriş denemesine bağlı (Faz 2'yi **engellemez**) | ~15 dk |
+| **2 Katalog + soru bankası + admin** | 2.1 Katalog modülü (mod/alt dal tabloları, 4 mod tohumu, yayındaki kategoriler uçları) · 2.2 Soru modülü (kurallar, CRUD servisi, tekrar uyarısı) · 2.3 Admin kimliği (parola + TOTP, denetim kaydı, ilk admin komutu) · 2.4 Admin API (kategori/soru yönetimi, CSV/Excel toplu yükleme önizleme+hata raporu, sayaçlar) · 2.5 Admin web (giriş, kategori yönetimi, akıcı soru girişi "kaydet ve yeni", liste/filtre, toplu yükleme) · 2.6 Mobil katalog ekranları (mod → alt dal, Karışık) · 2.7 Dosya depolama soyutlaması (yerel + R2 uygulaması) · 2.8 Geliştirme için örnek test soruları (açıkça "test verisi" işaretli) | 3–4 saat |
+| **3 Bireysel oyun** | Soru seçimi (son 200, 4/3/3), maç motoru + süre, puan merdiveni, jokerler (defter), reklamla devam (test reklamı arayüzü), soru bildirme, ekranlar + **otomatik testler** | 3–4 saat |
+| **4 Rakipli maç** | Eşleşme kuyruğu, bot, oda/davet (bağlantı mantığı), kopma/30 sn havuz, pes, rövanş, SignalR sözleşmesi + testler, ekranlar | 5–6 saat |
+| **5 Puan ve turnuva** | Dönemler, Redis sıralama, ödül tablosu, inceleme ekranı, men, dağıtım işi, cüzdan defteri + testler | 3–4 saat |
+| **6 Cüzdan ve mağaza** | Ürünler, kupon stoğu (şifreli), atomik satın alma, Ödüllerim, avatar/çerçeve, itiraz akışı + yarış testi | 3–4 saat |
+| **7 Reklam** | AdMob arayüzü (Google'ın herkese açık **test** reklam kimlikleriyle), niyet kaydı + SSV doğrulama mantığı + testler | 2 saat |
+| **8 Operasyon** | Destek, bildirim kutusu, FCM mantığı (kimlik anahtarı gelene kadar sahte gönderici), duyuru, dashboard, üye kontrolü, bot/ayar panelleri | 4–5 saat |
+| **9 Yayın hazırlığı (Claude kısmı)** | Güvenlik gözden geçirme, yedek/geri yükleme betikleri, yasal metin **taslakları**, Play Store sayfası metinleri, veri güvenliği formu taslağı | 2–3 saat |
+| **Tasarım** | Faz 8 ile 9 arası (K-53): renk, ikon, logo/QU¿ yazı karakteri, avatar/çerçeve çizimleri — kullanıcıyla birlikte | ayrı konuşma |
+
+\* Kaba tahmin: bugünkü hıza göre (Faz 0 + Faz 1 ≈ 2 saatlik çalışma + bekleme) çalışma süresi; derleme/indirme beklemeleri hariç, sapabilir.
+
+### Kullanıcının yapacakları (en sonda, tek liste)
+
+1. **Gerçek giriş denemesi** (Faz 1 kabulü): emülatörde e-posta ve Google ile giriş (kendi hesabınla).
+2. **Hesaplar:** Google Play Console (doğrulama günler sürer, erken başla), Cloudflare (R2 + Pages + DNS), Railway (yeni proje), GitHub deposu, AdMob, **alan adı** (ad QU¿ olduğu için yeniden belirlenecek, A-12), Firebase FCM için hizmet hesabı anahtarı (indirilen JSON dosyasının yolu `.env`'e; içeriği sohbete yazılmaz).
+3. **İçerik:** gerçek sorular ve alt dallar (admin panelinden), avatar/çerçeve görselleri, bot profilleri, ödül tablosu ve ürün fiyatları, kupon stoğu (elle satın alma), logo/ikon.
+4. **Yasal / vergi:** SMMM ve avukat görüşmeleri (docs/10 listesi), yasal metinlerin kontrolü, Play kapalı test için test kullanıcıları (yaklaşık 12 kişi, 14 gün — kural güncel kaynaktan teyit edilecek).
+5. **Kararlar:** docs/10'daki açık sorular (A-04 ödül tablosu, A-06 kupon markaları, A-11 yaş sınırı, A-12 alan adı vb.).

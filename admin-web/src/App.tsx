@@ -24,7 +24,7 @@ function App() {
 
   return (
     <main>
-      <h1>SenBilirsin Yönetim Paneli</h1>
+      <h1>QU¿ Yönetim Paneli</h1>
       <p>Faz 0 iskeleti. Giriş, soru yönetimi ve diğer bölümler sonraki fazlarda eklenecek.</p>
       <p>
         Admin API ({API_URL}): <strong data-testid="api-status">{STATUS_TEXT[status]}</strong>

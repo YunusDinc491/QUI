@@ -1,4 +1,4 @@
-# SenBilirsin — Claude Çalışma Kuralları
+# QU¿ — Claude Çalışma Kuralları
 
 Bu dosya projeye özeldir ve her oturumun başında okunur. Kullanıcının genel tercihleri `~/.claude/CLAUDE.md` içindedir (Türkçe konuş, adım adım ne ve neden anlat, uzun işlerde kalan süreyi söyle, uydurma sonuç verme). Bu dosya onların üstüne proje kurallarını ekler.
 
@@ -23,7 +23,7 @@ Bu dosya projeye özeldir ve her oturumun başında okunur. Kullanıcının gene
 
 ## 2. Proje özeti
 
-Türkçe mobil bilgi yarışması. İlk sürüm yalnızca Android. 4 mod: Genel, Branş seçmeli, KPSS tarzı, Fanlara özel. Bireysel ve rakipli (rastgele / arkadaş daveti / isteğe bağlı bot) maçlar, 10 soru, 15 sn. 2 günlük turnuva sıralaması; ilk 10'a hediye puanı; hediye puanıyla mağazadan kupon, joker, avatar, çerçeve. Ödüllü reklam (AdMob).
+Türkçe mobil bilgi yarışması; uygulama adı **QU¿** (K-01). Kod/kimlik adları (`SenBilirsin.*`, `com.senbilirsin.app`, Firebase `senbilirsin-832b8`) bilerek eski haliyle kalır; kullanıcıya görünen her yerde "QU¿" yazılır. İlk sürüm yalnızca Android. 4 mod: Genel, Branş seçmeli, KPSS tarzı, Fanlara özel. Bireysel ve rakipli (rastgele / arkadaş daveti / isteğe bağlı bot) maçlar, 10 soru, 15 sn. 2 günlük turnuva sıralaması; ilk 10'a hediye puanı; hediye puanıyla mağazadan kupon, joker, avatar, çerçeve. Ödüllü reklam (AdMob).
 
 Teknoloji: Flutter · C# .NET 10 modüler monolit · PostgreSQL · Redis · SignalR · Firebase Auth/FCM/Crashlytics · AdMob (SSV) · Cloudflare R2/Pages/DNS · Railway · React admin paneli + ayrı admin API.
 
@@ -64,6 +64,7 @@ Teknoloji: Flutter · C# .NET 10 modüler monolit · PostgreSQL · Redis · Sign
 - Kalıcı kurulum (Flutter, Android Studio vb.), **yeni paket/bağımlılık** (NuGet, pub, npm; neden gerekli, alternatifi ne) ve dış servis işlemi öncesi kullanıcıya söyle. Hesap açma, ödeme, deploy, dışarıya mesaj gibi dışarıya etki eden işleri onay alarak yap.
 - Oturum başında bu dosyayı ve `docs/ilerleme.md`'nin son kayıtlarını oku.
 - Her adım sonunda kısa özet ver: ne yapıldı, ne doğrulandı, ne kaldı.
+- **Küçük parçalar (kullanıcı kuralı, 2026-10-20):** İşi küçük, sınırları belli parçalara böl (her parça: yap → doğrula (test/derleme/ekran) → ilerlemeye yaz → kullanıcıya ne yaptığını kısaca anlat). Büyük işi tek seferde yazma; varsayıma/tahmine dayanma, emin değilsen önce dosyaya/koda bak. **Kullanıcıya düşen işler (hesap açma, mağaza/ödeme, gerçek hesapla giriş denemesi, içerik girişi, onaylar) en sona bırakılır**; Claude'un yapabildiği her şey önce yapılır, kullanıcı işleri tek bir listede toplanıp sonda verilir.
 
 ## 6. Kod kuralları
 

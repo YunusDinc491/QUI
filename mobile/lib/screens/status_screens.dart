@@ -20,7 +20,7 @@ class StatusScreen extends StatelessWidget {
         return MessageBody(
           icon: Icons.wifi_off,
           title: 'İnternet bağlantısı gerekli',
-          message: 'SenBilirsin\'i oynamak için internete bağlı olmalısın. Bağlantını kontrol edip tekrar dene.',
+          message: 'Oynamak için internete bağlı olmalısın. Bağlantını kontrol edip tekrar dene.',
           actions: [FilledButton(onPressed: controller.start, child: const Text('Tekrar dene'))],
         );
       case AppStage.updateRequired:
