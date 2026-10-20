@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "611895578698",
+    "project_id": "senbilirsin-832b8",
+    "storage_bucket": "senbilirsin-832b8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611895578698:android:d19800cca4664612f5d6b3",
+        "android_client_info": {
+          "package_name": "com.senbilirsin.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611895578698-stmh2blpnjiulq6o053t6dk9vnj0her0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.senbilirsin.app",
+            "certificate_hash": "6b4ad969bd1a57862577b7b1ef33477cc1050a96"
+          }
+        },
+        {
+          "client_id": "611895578698-bc332njo8q5iig68jrjsao19nfj427on.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhtGuRwrJWNQ4w7X5Mjx5vRFrtsYWeJhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611895578698-bc332njo8q5iig68jrjsao19nfj427on.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
