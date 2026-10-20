@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../ads/rewarded_ad_service.dart';
 import '../auth/auth_gateway.dart';
 import '../core/api_client.dart';
 import '../core/version.dart';
@@ -21,12 +22,16 @@ enum AppStage {
 /// Oturum, kayıt ve profil akışını yönetir. Ekranlar bu denetleyiciyi dinler ve yöntemlerini çağırır;
 /// yöntemler hata durumunda [AuthException] ya da [ApiException] fırlatır (ekran mesajı gösterir).
 class AppController extends ChangeNotifier {
-  AppController({required this.api, required this.auth, required this.prefs, required this.appVersion});
+  AppController({required this.api, required this.auth, required this.prefs, required this.appVersion, RewardedAdService? ads})
+      : ads = ads ?? StubRewardedAdService();
 
   final ApiClient api;
   final AuthGateway auth;
   final SharedPreferences prefs;
   final String appVersion;
+
+  /// Ödüllü reklam hizmeti (Faz 7'ye kadar yalnızca geliştirme derlemesinde çalışan taslak).
+  final RewardedAdService ads;
 
   AppStage stage = AppStage.starting;
   AppConfigInfo? config;

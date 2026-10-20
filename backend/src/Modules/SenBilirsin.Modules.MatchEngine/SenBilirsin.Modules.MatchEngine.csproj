@@ -6,4 +6,26 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Modül kendi HTTP uçlarını da barındırır (Minimal API) -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SenBilirsin.Modules.Catalog\SenBilirsin.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\SenBilirsin.Modules.Questions\SenBilirsin.Modules.Questions.csproj" />
+    <ProjectReference Include="..\SenBilirsin.Modules.Users\SenBilirsin.Modules.Users.csproj" />
+    <ProjectReference Include="..\SenBilirsin.Modules.Wallet\SenBilirsin.Modules.Wallet.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -117,3 +117,24 @@ JSON'da sıralamalar metin: zorluk `Easy|Medium|Hard`, durum `Draft|Published|Ar
 | `GET /api/audit-logs` | `action, entity, page, pageSize(≤200)`; her yazma işleminin önce/sonra kaydı |
 
 Yerel komutlar (AdminApi, sunucu başlatmaz): `-- create-admin <e-posta>` (rastgele parola + TOTP anahtarı → yalnızca `.local/` altındaki git dışı dosya), `-- seed-samples` (yalnızca Development; 60 örnek soru).
+
+## 8. Gerçekleşen uçlar — Faz 3 (bireysel maç, 2026-10-21)
+
+> **Sapma notu:** Bu dosyanın §2–3 taslağında `StartSolo`, `SubmitAnswer`, `UseJoker`… SignalR metotları olarak geçiyordu. Bireysel maçta sunucudan istemciye anlık itme gerekmediği (süreyi sunucu zaman damgasıyla ölçer, istemci geri sayımı sunucu saat farkıyla gösterir) ve REST yeniden bağlanmayı/test edilebilirliği kolaylaştırdığı için **bireysel maç REST ile** yapıldı. SignalR rakipli maç (Faz 4) içindir. (Taslak olduğu için karar değişikliği sayılmadı.)
+
+Hepsi `Authorization` + `X-Device-Id` ister; aktif cihaz değilse `401 SESSION_REPLACED`. Hata gövdesi `{code, message}` (+ `matchId`). Zamanlar UTC (ISO 8601). **Doğru şık hiçbir görünümde yoktur**; yalnızca cevap yanıtında (`AnswerOutcome`) ve maç bittikten sonra özette gelir. Şıklar sunucunun karıştırdığı ekran sırasındadır; tüm indeksler ekran sırasındadır.
+
+| Uç | Açıklama |
+|---|---|
+| `GET /api/jokers` | `{half, double, hint}` bakiyeleri (ilk çağrıda her birinden 5 hediye, defterle) |
+| `POST /api/matches/solo` | `{mode: general\|branch\|kpss\|fan, categoryId?}` → 201 `MatchState`. Kategori yoksa "Karışık" (Genel'de tek kategori). Hatalar: `MODE_INVALID`, `MODE_UNAVAILABLE`, `CATEGORY_UNAVAILABLE`(404), `NOT_ENOUGH_QUESTIONS`(409), `MATCH_IN_PROGRESS`(409 + `matchId`) |
+| `GET /api/matches/current` | Devam eden maçın tam durumu (yeniden bağlanma); yoksa 404 `NO_ACTIVE_MATCH` |
+| `POST /api/matches/{id}/answer` | `{position, option?, second?}` → `AnswerOutcome {position, isCorrect, timedOut, correctOption, chosenOption, secondOption, explanation, state}`. `option` boş = "süre doldu" bildirimi (yalnız süre bittiyse). İlk dokunuş kesin: aynı soruya tekrar istek kayıtlı sonucu döner. Süre sonu + 1,5 sn toleranstan sonraki cevap süre aşımı sayılır. `TOO_EARLY`, `WRONG_POSITION`, `OPTION_INVALID`, `DOUBLE_NOT_ACTIVE` |
+| `POST /api/matches/{id}/joker` | `{position, type: half\|double\|hint}` → `{joker: {type, removed?, hint?}, jokers}`. Soru başına en çok bir, tür başına maçta bir. `JOKER_TYPE_USED`, `JOKER_ALREADY_USED_THIS_QUESTION`, `NO_JOKER`, `QUESTION_TIMED_OUT` |
+| `POST /api/matches/{id}/continue` | `{adIntentId}` — yanlıştan sonra (45 sn içinde, maçta bir kez) reklam doğrulanınca aynı sıraya yeni **kolay** soru. Faz 3'te yalnız `Ads:TestMode` + `test-…` kimlik; gerçek doğrulama Faz 7 |
+| `POST /api/matches/{id}/decline` | Devam teklifini reddet → maç elenmeyle biter |
+| `POST /api/matches/{id}/forfeit` | Pes: o ana kadarki doğru sayısına göre puan |
+| `GET /api/matches/{id}/summary` | Maç bittikten sonra: her soru, ekran şıkları, doğru şık, cevaplar, açıklama, kullanılan joker, değiştirilen soru işareti |
+| `POST /api/matches/{id}/report` | `{position, reason(≤300)}` → 204. Yalnızca gösterilmiş soru; soru×kullanıcı başına bir bildirim |
+
+`MatchState`: `matchId, mode, categoryId, status(running\|awaiting_continue\|finished\|cancelled\|forfeited), position, totalQuestions, correctCount, question{position, text, options[4], startsAt, endsAt}, activeJoker, usedJokerTypes, jokers, continueOffer{deadline}, result{status, reason, correctCount, points, settled}, serverNow`. `question.startsAt` gelecekte olabilir (önceki sonucun gösterilmesi: sonraki soru 3 sn sonra; ilk soru 2 sn sonra). Süre: soru başına 15 sn. Terk: son soru bitişinden 120 sn sonra hâlâ hareket yoksa maç iptal (puan yok).

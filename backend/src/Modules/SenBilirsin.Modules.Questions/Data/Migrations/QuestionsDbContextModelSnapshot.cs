@@ -120,6 +120,72 @@ namespace SenBilirsin.Modules.Questions.Data.Migrations
 
                     b.ToTable("questions", "questions");
                 });
+
+            modelBuilder.Entity("SenBilirsin.Modules.Questions.Domain.QuestionReport", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("question_id");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("reason");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_question_reports");
+
+                    b.HasIndex("QuestionId", "UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_question_reports_question_id_user_id");
+
+                    b.ToTable("question_reports", "questions");
+                });
+
+            modelBuilder.Entity("SenBilirsin.Modules.Questions.Domain.UserSeenQuestion", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("question_id");
+
+                    b.Property<DateTime>("SeenAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("seen_at");
+
+                    b.HasKey("UserId", "QuestionId")
+                        .HasName("pk_user_seen_questions");
+
+                    b.HasIndex("UserId", "SeenAt")
+                        .HasDatabaseName("ix_user_seen_questions_user_id_seen_at");
+
+                    b.ToTable("user_seen_questions", "questions");
+                });
 #pragma warning restore 612, 618
         }
     }

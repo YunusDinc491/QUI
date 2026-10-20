@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using SenBilirsin.MobileApi.Configuration;
 
@@ -14,6 +16,9 @@ public sealed class MobileApiFactory : WebApplicationFactory<MobileApiMarker>
 {
     public const string TestDatabase = "senbilirsin_test";
 
+    /// <summary>Testlerde zamanı elle ilerletmek için (soru süresi, terk, devam penceresi).</summary>
+    public FakeClock Clock { get; } = new(DateTimeOffset.UtcNow);
+
     public MobileApiFactory()
     {
         var connectionString = BuildTestConnectionString();
@@ -26,6 +31,9 @@ public sealed class MobileApiFactory : WebApplicationFactory<MobileApiMarker>
     {
         // Development: DevAuth (sahte kimlik) ve otomatik migration açık (appsettings.Development.json)
         builder.UseEnvironment("Development");
+        // Reklamla devam testleri için Faz 3 test kapısı (üretimde kapalıdır)
+        builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?> { ["Ads:TestMode"] = "true" }));
+        builder.ConfigureServices(services => services.AddSingleton<TimeProvider>(Clock));
     }
 
     private static string BuildTestConnectionString()

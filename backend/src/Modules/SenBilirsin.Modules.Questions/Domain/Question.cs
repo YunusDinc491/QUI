@@ -51,3 +51,24 @@ public class Question
 
     public string[] Options => [OptionA, OptionB, OptionC, OptionD];
 }
+
+/// <summary>Kullanıcının gördüğü soru (tekrar görmemesi için son 200 tutulur). Modüller arası yabancı anahtar yoktur.</summary>
+public class UserSeenQuestion
+{
+    public Guid UserId { get; set; }
+    public int QuestionId { get; set; }
+    public DateTime SeenAt { get; set; }
+}
+
+/// <summary>Oyuncunun bildirdiği soru (docs/05 "Bildirilen sorular"). Aynı soruya birden fazla bildirim tek satırda sayaçla birleşir.</summary>
+public class QuestionReport
+{
+    public const int ReasonMax = 300;
+
+    public long Id { get; set; }
+    public int QuestionId { get; set; }
+    public Guid UserId { get; set; }
+    public string Reason { get; set; } = "";
+    public string Status { get; set; } = "open";
+    public DateTime CreatedAt { get; set; }
+}

@@ -10,6 +10,8 @@ public class QuestionsDbContext(DbContextOptions<QuestionsDbContext> options) : 
     public const string Schema = "questions";
 
     public DbSet<Question> Questions => Set<Question>();
+    public DbSet<UserSeenQuestion> SeenQuestions => Set<UserSeenQuestion>();
+    public DbSet<QuestionReport> Reports => Set<QuestionReport>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +34,24 @@ public class QuestionsDbContext(DbContextOptions<QuestionsDbContext> options) : 
             // Oyun soru seçimi: kategori + yayın durumu + zorluk
             e.HasIndex(x => new { x.CategoryId, x.Status, x.Difficulty });
             e.HasIndex(x => x.NormalizedText);
+        });
+
+        // Kullanıcının son gördüğü sorular (son 200 tutulur; docs/01 §3)
+        modelBuilder.Entity<UserSeenQuestion>(e =>
+        {
+            e.ToTable("user_seen_questions");
+            e.HasKey(x => new { x.UserId, x.QuestionId });
+            e.HasIndex(x => new { x.UserId, x.SeenAt });
+        });
+
+        // Soru bildirimleri: bir kullanıcı aynı soruyu bir kez bildirir
+        modelBuilder.Entity<QuestionReport>(e =>
+        {
+            e.ToTable("question_reports");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Reason).HasMaxLength(QuestionReport.ReasonMax).IsRequired();
+            e.Property(x => x.Status).HasMaxLength(16).IsRequired();
+            e.HasIndex(x => new { x.QuestionId, x.UserId }).IsUnique();
         });
     }
 }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../app/app_controller.dart';
 import '../core/api_client.dart';
-import '../widgets/common.dart';
+import '../game/game_models.dart';
+import '../game/game_screen.dart';
 import 'category_screen.dart';
 
 /// Oyun için seçilen mod ve alt dal. [categoryId] null ise "Karışık" (modun tüm yayındaki alt dalları)
@@ -32,6 +33,7 @@ class PlayTab extends StatefulWidget {
 
 class _PlayTabState extends State<PlayTab> {
   late Future<List<CatalogMode>> _catalog;
+  late Future<MatchState?> _current;
 
   static const _icons = {
     'general': Icons.public,
@@ -44,17 +46,30 @@ class _PlayTabState extends State<PlayTab> {
   void initState() {
     super.initState();
     _catalog = widget.controller.api.fetchCatalog();
+    _current = _loadCurrent();
   }
 
-  void _reload() => setState(() => _catalog = widget.controller.api.fetchCatalog());
+  /// Devam eden maç var mı (uygulama kapanıp açıldıysa kaldığı yerden devam). Hata olursa sessizce yok sayılır.
+  Future<MatchState?> _loadCurrent() async {
+    try {
+      return await widget.controller.api.fetchCurrentMatch();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void _reload() => setState(() {
+        _catalog = widget.controller.api.fetchCatalog();
+        _current = _loadCurrent();
+      });
 
   void _select(GameSelection selection) {
     final callback = widget.onSelected;
     if (callback != null) {
       callback(selection);
     } else {
-      final target = selection.category?.name ?? (selection.mode.isGeneral ? selection.mode.name : '${selection.mode.name} · Karışık');
-      showSnack(context, 'Seçildi: $target. Oyun ekranları Faz 3\'te eklenecek.');
+      startSoloGame(context, widget.controller.api, widget.controller.ads, selection.mode.code, selection.categoryId)
+          .then((_) => mounted ? setState(() => _current = _loadCurrent()) : null);
     }
   }
 
@@ -83,6 +98,26 @@ class _PlayTabState extends State<PlayTab> {
           children: [
             Text('Merhaba, $name', style: Theme.of(context).textTheme.headlineSmall, key: const Key('greeting')),
             const SizedBox(height: 16),
+            FutureBuilder<MatchState?>(
+              future: _current,
+              builder: (context, snapshot) {
+                final match = snapshot.data;
+                if (match == null) return const SizedBox.shrink();
+                return Card(
+                  key: const Key('resume-card'),
+                  color: Theme.of(context).colorScheme.tertiaryContainer,
+                  child: ListTile(
+                    title: const Text('Devam eden bir maçın var'),
+                    subtitle: Text('${match.position}. soru · ${match.correctCount} doğru'),
+                    trailing: FilledButton(
+                      onPressed: () => startSoloGame(context, widget.controller.api, widget.controller.ads, match.mode, match.categoryId)
+                          .then((_) => mounted ? setState(() => _current = _loadCurrent()) : null),
+                      child: const Text('Devam et'),
+                    ),
+                  ),
+                );
+              },
+            ),
             FutureBuilder<List<CatalogMode>>(
               future: _catalog,
               builder: (context, snapshot) {

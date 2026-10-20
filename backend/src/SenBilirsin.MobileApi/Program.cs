@@ -3,9 +3,12 @@ using SenBilirsin.MobileApi.Configuration;
 using SenBilirsin.MobileApi.Hubs;
 using SenBilirsin.Modules.Catalog;
 using SenBilirsin.Modules.Catalog.Api;
+using SenBilirsin.Modules.MatchEngine;
+using SenBilirsin.Modules.MatchEngine.Api;
 using SenBilirsin.Modules.Questions;
 using SenBilirsin.Modules.Users;
 using SenBilirsin.Modules.Users.Api;
+using SenBilirsin.Modules.Wallet;
 
 // Geliştirmede depo kökündeki .env dosyasını ortam değişkeni olarak yükle (üretimde yüklenmez)
 DevEnvFile.LoadIfDevelopment();
@@ -21,6 +24,8 @@ builder.Services.AddSenBilirsinAuthentication(builder.Configuration, builder.Env
 builder.Services.AddUsersModule();
 builder.Services.AddCatalogModule();
 builder.Services.AddQuestionsModule();
+builder.Services.AddWalletModule();
+builder.Services.AddMatchEngineModule();
 
 // Flutter web önizlemesi (geliştirme) farklı adresten çağırdığı için CORS: izinli adresler ayardan okunur.
 // Mobil (Android) uygulama CORS'a tabi değildir. Üretimde Cors__AllowedOrigins ile verilir.
@@ -41,6 +46,8 @@ if (app.Configuration.GetValue<bool>("Database:AutoMigrate"))
     await app.Services.MigrateUsersAsync();
     await app.Services.MigrateCatalogAsync();
     await app.Services.MigrateQuestionsAsync();
+    await app.Services.MigrateWalletAsync();
+    await app.Services.MigrateMatchEngineAsync();
 }
 
 app.UseCors();
@@ -62,6 +69,7 @@ app.MapGet("/api/config", (IConfiguration config) => Results.Ok(new
 
 app.MapUsersEndpoints();
 app.MapCatalogEndpoints();
+app.MapMatchEndpoints();
 
 // Faz 0: Flutter <-> SignalR prototipi için echo hub'ı (oyun mantığı Faz 3-4'te gelecek)
 app.MapHub<GameHub>("/hubs/game");

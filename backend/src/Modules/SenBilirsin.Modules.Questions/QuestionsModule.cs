@@ -19,6 +19,9 @@ public static class QuestionsModule
             .UseSnakeCaseNamingConvention());
         services.AddScoped<QuestionService>();
         services.AddScoped<QuestionImportService>();
+        services.TryAddSingleton(Random.Shared);
+        services.AddScoped<QuestionBank>();
+        services.AddScoped<IQuestionBank>(sp => sp.GetRequiredService<QuestionBank>());
         return services;
     }
 
