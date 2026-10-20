@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/check-progress.mjs",
+            "timeout": 15,
+            "statusMessage": "İlerleme kaydı kontrol ediliyor..."
+          }
+        ]
+      }
+    ]
+  }
+}

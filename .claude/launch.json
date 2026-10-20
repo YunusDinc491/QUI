@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mobile-api",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "backend/src/SenBilirsin.MobileApi", "--urls", "http://localhost:5080"],
+      "port": 5080
+    },
+    {
+      "name": "admin-api",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "backend/src/SenBilirsin.AdminApi", "--urls", "http://localhost:5090"],
+      "port": 5090
+    },
+    {
+      "name": "admin-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "admin-web"],
+      "port": 5173
+    },
+    {
+      "name": "flutter-web",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd mobile && C:\\Users\\Lider\\dev\\flutter\\bin\\flutter.bat run -d web-server --web-hostname localhost --web-port 5174"],
+      "port": 5174
+    }
+  ]
+}
