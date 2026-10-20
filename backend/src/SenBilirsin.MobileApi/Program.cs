@@ -7,9 +7,12 @@ using SenBilirsin.Modules.MatchEngine;
 using SenBilirsin.Modules.MatchEngine.Api;
 using SenBilirsin.Modules.MatchEngine.Versus;
 using SenBilirsin.Modules.Questions;
+using SenBilirsin.Modules.Tournament;
+using SenBilirsin.Modules.Tournament.Api;
 using SenBilirsin.Modules.Users;
 using SenBilirsin.Modules.Users.Api;
 using SenBilirsin.Modules.Wallet;
+using SenBilirsin.Modules.Wallet.Api;
 
 // Geliştirmede depo kökündeki .env dosyasını ortam değişkeni olarak yükle (üretimde yüklenmez)
 DevEnvFile.LoadIfDevelopment();
@@ -34,6 +37,8 @@ builder.Services.AddCatalogModule();
 builder.Services.AddQuestionsModule();
 builder.Services.AddWalletModule();
 builder.Services.AddMatchEngineModule();
+builder.Services.AddTournamentModule();
+builder.Services.AddTournamentJobs(); // dönem açma + kapanışta ödül dağıtımı (tek instance)
 
 // Flutter web önizlemesi (geliştirme) farklı adresten çağırdığı için CORS: izinli adresler ayardan okunur.
 // Mobil (Android) uygulama CORS'a tabi değildir. Üretimde Cors__AllowedOrigins ile verilir.
@@ -56,6 +61,7 @@ if (app.Configuration.GetValue<bool>("Database:AutoMigrate"))
     await app.Services.MigrateQuestionsAsync();
     await app.Services.MigrateWalletAsync();
     await app.Services.MigrateMatchEngineAsync();
+    await app.Services.MigrateTournamentAsync();
 }
 
 app.UseCors();
@@ -78,6 +84,8 @@ app.MapGet("/api/config", (IConfiguration config) => Results.Ok(new
 app.MapUsersEndpoints();
 app.MapCatalogEndpoints();
 app.MapMatchEndpoints();
+app.MapTournamentEndpoints();
+app.MapWalletEndpoints();
 
 // Oyun hub'ı: rakipli maç (eşleşme, oda, soru akışı). Bireysel maç REST ile (docs/04 §8)
 app.MapHub<GameHub>("/hubs/game");

@@ -9,6 +9,7 @@ public class WalletDbContext(DbContextOptions<WalletDbContext> options) : DbCont
     public const string Schema = "wallet";
 
     public DbSet<JokerLedgerEntry> JokerLedger => Set<JokerLedgerEntry>();
+    public DbSet<PointsLedgerEntry> PointsLedger => Set<PointsLedgerEntry>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,6 +24,19 @@ public class WalletDbContext(DbContextOptions<WalletDbContext> options) : DbCont
             e.Property(x => x.IdempotencyKey).HasMaxLength(128).IsRequired();
             e.HasIndex(x => x.IdempotencyKey).IsUnique();
             e.HasIndex(x => new { x.UserId, x.JokerType });
+        });
+
+        modelBuilder.Entity<PointsLedgerEntry>(e =>
+        {
+            e.ToTable("wallet_ledger");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Type).HasMaxLength(16).IsRequired();
+            e.Property(x => x.RefType).HasMaxLength(32);
+            e.Property(x => x.RefId).HasMaxLength(64);
+            e.Property(x => x.Note).HasMaxLength(300);
+            e.Property(x => x.IdempotencyKey).HasMaxLength(128).IsRequired();
+            e.HasIndex(x => x.IdempotencyKey).IsUnique();
+            e.HasIndex(x => x.UserId);
         });
     }
 }

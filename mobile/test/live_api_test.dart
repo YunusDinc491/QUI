@@ -34,6 +34,17 @@ void main() {
     final jokers = await api.fetchJokers();
     expect(jokers.half, 5);
 
+    // Turnuva ve cüzdan uçları gerçek JSON'la
+    final tournament = await api.fetchTournament();
+    expect(tournament.rewards, hasLength(10));
+    expect(tournament.endsAt.isAfter(tournament.serverNow), isTrue);
+    expect(tournament.endsAt.difference(tournament.serverNow), lessThanOrEqualTo(const Duration(hours: 48)));
+    final previous = await api.fetchPreviousTournament();
+    expect(previous.top.length, lessThanOrEqualTo(10));
+    final wallet = await api.fetchWallet();
+    expect((wallet.balance, wallet.half), (0, 5));
+    expect(await api.fetchPointsHistory(), isEmpty);
+
     final initial = await api.startSolo('branch', history.id);
     expect(initial.total, 10);
     expect(initial.question!.options, hasLength(4));

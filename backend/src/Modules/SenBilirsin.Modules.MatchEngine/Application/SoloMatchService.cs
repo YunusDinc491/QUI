@@ -41,6 +41,7 @@ public sealed class SoloMatchService(
     IQuestionBank bank,
     ICatalogQueries catalog,
     MatchScopeResolver scopeResolver,
+    IMatchPointsSink pointsSink,
     IJokerWallet wallet,
     IRewardedAdGate adGate,
     MatchLocks locks,
@@ -201,6 +202,7 @@ public sealed class SoloMatchService(
             return MatchResult<AnswerOutcome>.Fail("ALREADY_ANSWERED", "Bu soru zaten cevaplandı.", 409);
         }
 
+        await CreditIfSettledAsync(ctx, ct);
         return MatchResult<AnswerOutcome>.Ok(new AnswerOutcome(position, isCorrect, timedOut, correctDisplay,
             answer.ChosenDisplay, answer.SecondDisplay, question.Explanation, await BuildStateAsync(ctx, ct)));
     }
@@ -309,6 +311,7 @@ public sealed class SoloMatchService(
         {
             Finalize(ctx, MatchStatus.Finished, MatchEndReasons.Eliminated, Now);
             await db.SaveChangesAsync(ct);
+            await CreditIfSettledAsync(ctx, ct);
         }
 
         // Zaten bitmişse (örn. süre dolup kesinleşmiş) mevcut sonuç aynen döner
@@ -330,6 +333,7 @@ public sealed class SoloMatchService(
             var awaiting = ctx.Match.Status == MatchStatus.AwaitingContinue;
             Finalize(ctx, awaiting ? MatchStatus.Finished : MatchStatus.Forfeited, awaiting ? MatchEndReasons.Eliminated : MatchEndReasons.Forfeit, Now);
             await db.SaveChangesAsync(ct);
+            await CreditIfSettledAsync(ctx, ct);
         }
 
         return MatchResult<MatchState>.Ok(await BuildStateAsync(ctx, ct));
@@ -477,8 +481,20 @@ public sealed class SoloMatchService(
             }
         }
 
-        if (changed) await db.SaveChangesAsync(ct);
+        if (changed)
+        {
+            await db.SaveChangesAsync(ct);
+            await CreditIfSettledAsync(ctx, ct);
+        }
+
         return changed;
+    }
+
+    /// <summary>Puan kesinleştiyse (ve iptal değilse) turnuvaya iletir; alıcı aynı maçı ikinci kez yazmaz.</summary>
+    private async Task CreditIfSettledAsync(Ctx ctx, CancellationToken ct)
+    {
+        if (ctx.Player.SettledAt is { } settled && ctx.Player.Points > 0 && ctx.Match.Status != MatchStatus.Cancelled)
+            await pointsSink.CreditAsync(ctx.Match.Id, ctx.Player.UserId, ctx.Player.Points, settled, ct);
     }
 
     private async Task<MatchState> BuildStateAsync(Ctx ctx, CancellationToken ct)

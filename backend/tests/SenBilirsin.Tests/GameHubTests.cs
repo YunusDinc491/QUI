@@ -13,8 +13,8 @@ using SenBilirsin.Modules.Questions.Data;
 namespace SenBilirsin.Tests;
 
 /// <summary>Faz 4.4: SignalR hub'ı uçtan uca (gerçek SignalR istemcisi + test sunucusu + PostgreSQL).</summary>
-[Collection("api")]
-public class GameHubTests(MobileApiFactory factory)
+[Collection("hub")]
+public class GameHubTests(HubApiFactory factory)
 {
     private sealed class Client(HubConnection connection, Guid userId) : IAsyncDisposable
     {
@@ -263,7 +263,7 @@ public class GameHubTests(MobileApiFactory factory)
         await a.Connection.StartAsync();
         await a.InvokeAsync("JoinQueue", "branch", category);
 
-        var timeout = await a.WaitAsync("QueueTimeout", 6000); // test sunucusunda kuyruk süresi 2 sn
+        var timeout = await a.WaitAsync("QueueTimeout", 15000); // test sunucusunda kuyruk süresi 6 sn
         Assert.Equal(3, timeout.GetProperty("options").GetArrayLength());
 
         Assert.True((await a.InvokeAsync("ChooseFallback", "bot", null)).GetProperty("ok").GetBoolean());

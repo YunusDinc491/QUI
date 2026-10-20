@@ -7,6 +7,7 @@ import { Import } from './pages/Import.tsx'
 import { Login } from './pages/Login.tsx'
 import { QuestionForm } from './pages/QuestionForm.tsx'
 import { Questions } from './pages/Questions.tsx'
+import { Tournament } from './pages/Tournament.tsx'
 
 // Yönetim paneli kabuğu: giriş kapısı + üst menü + sayfa seçimi.
 // Tasarım en sona bırakıldı (K-53); ekranlar işlevsel ve sade.
@@ -40,6 +41,7 @@ function App() {
   if (active === 'categories') page = <Categories />
   else if (active === 'import') page = <Import />
   else if (active === 'audit') page = <Audit />
+  else if (active === 'tournament') page = <Tournament />
   else if (id === 'new') page = <QuestionForm />
   else if (id && /^\d+$/.test(id)) page = <QuestionForm key={id} questionId={Number(id)} />
   else {
@@ -56,6 +58,7 @@ function App() {
           <a href="#/questions/new" className={id === 'new' ? 'active' : ''}>Yeni soru</a>
           <a href="#/categories" className={active === 'categories' ? 'active' : ''}>Kategoriler</a>
           <a href="#/import" className={active === 'import' ? 'active' : ''}>Toplu yükleme</a>
+          <a href="#/tournament" className={active === 'tournament' ? 'active' : ''}>Turnuva</a>
           <a href="#/audit" className={active === 'audit' ? 'active' : ''}>Denetim</a>
         </nav>
         <span className="who">{email}</span>

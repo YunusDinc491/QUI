@@ -29,3 +29,17 @@ public sealed class TestRewardedAdGate(IConfiguration config) : IRewardedAdGate
         return Task.FromResult(_used.TryAdd($"{userId:N}:{purpose}:{intentId}", 0));
     }
 }
+
+/// <summary>
+/// Kesinleşen maç puanının dönemlik/toplam puana yazılması için arayüz (Turnuva modülü gerçekler). Bot ve iptal edilen maçlar için çağrılmaz.
+/// Aynı (maç, oyuncu) çifti ikinci kez çağrılırsa tekrar yazılmaz.
+/// </summary>
+public interface IMatchPointsSink
+{
+    Task CreditAsync(Guid matchId, Guid userId, int points, DateTime settledAt, CancellationToken ct = default);
+}
+
+internal sealed class NullMatchPointsSink : IMatchPointsSink
+{
+    public Task CreditAsync(Guid matchId, Guid userId, int points, DateTime settledAt, CancellationToken ct = default) => Task.CompletedTask;
+}

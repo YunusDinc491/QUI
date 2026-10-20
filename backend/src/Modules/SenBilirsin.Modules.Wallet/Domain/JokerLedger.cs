@@ -45,3 +45,37 @@ public class JokerLedgerEntry
     public string IdempotencyKey { get; set; } = "";
     public DateTime CreatedAt { get; set; }
 }
+
+public static class PointsLedgerTypes
+{
+    public const string Tournament = "tournament";
+    public const string Purchase = "purchase";
+    public const string Refund = "refund";
+    public const string Admin = "admin";
+}
+
+/// <summary>
+/// Hediye puanı defteri satırı (docs/03 <c>wallet_ledger</c>). Yalnızca eklenir; bakiye = <see cref="Amount"/> toplamı.
+/// <see cref="IdempotencyKey"/> benzersizdir: aynı işlem iki kez uygulanmaz.
+/// </summary>
+public class PointsLedgerEntry
+{
+    public long Id { get; set; }
+    public Guid UserId { get; set; }
+
+    /// <summary>+ kazanç, − harcama.</summary>
+    public long Amount { get; set; }
+
+    public string Type { get; set; } = PointsLedgerTypes.Tournament;
+
+    /// <summary>İlgili kayıt türü ve kimliği (örn. "period" / dönem kimliği, "order" / sipariş).</summary>
+    public string? RefType { get; set; }
+
+    public string? RefId { get; set; }
+    public string IdempotencyKey { get; set; } = "";
+
+    /// <summary>Yönetici düzeltmesinde gerekçe.</summary>
+    public string? Note { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+}

@@ -490,6 +490,17 @@ public sealed class VersusMatchRunner
             });
         }
 
+        // Kesinleşen puanı turnuvaya ilet (bot ve 0 puan hariç)
+        await using (var creditScope = _scopes.CreateAsyncScope())
+        {
+            var sink = creditScope.ServiceProvider.GetRequiredService<IMatchPointsSink>();
+            foreach (var p in Humans)
+            {
+                var points = ReferenceEquals(p, _a) ? outcome.PointsA : outcome.PointsB;
+                if (points > 0) await sink.CreditAsync(MatchId, p.Id, points, Now);
+            }
+        }
+
         foreach (var p in Humans)
         {
             var mine = ReferenceEquals(p, _a) ? (outcome.ResultA, outcome.PointsA, outcome.BonusA) : (outcome.ResultB, outcome.PointsB, outcome.BonusB);

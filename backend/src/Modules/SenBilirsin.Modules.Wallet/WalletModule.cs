@@ -19,6 +19,8 @@ public static class WalletModule
             .UseSnakeCaseNamingConvention());
         services.AddScoped<JokerWallet>();
         services.AddScoped<IJokerWallet>(sp => sp.GetRequiredService<JokerWallet>());
+        services.AddScoped<PointsWallet>();
+        services.AddScoped<IPointsWallet>(sp => sp.GetRequiredService<PointsWallet>());
         return services;
     }
 

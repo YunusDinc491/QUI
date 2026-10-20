@@ -4,6 +4,7 @@ import '../app/app_controller.dart';
 import '../widgets/common.dart';
 import 'play_tab.dart';
 import 'profile_tab.dart';
+import 'tournament_tab.dart';
 
 /// Alt menülü ana kabuk: Oyna · Turnuva · Mağaza · Profil (docs/06 §2). Oyun/turnuva/mağaza içerikleri sonraki fazlarda.
 class HomeShell extends StatefulWidget {
@@ -22,13 +23,7 @@ class _HomeShellState extends State<HomeShell> {
   Widget build(BuildContext context) {
     final pages = <Widget>[
       PlayTab(controller: widget.controller),
-      const SafeArea(
-        child: MessageBody(
-          icon: Icons.emoji_events_outlined,
-          title: 'Turnuva',
-          message: 'Sıralama ve ödüller Faz 5\'te eklenecek.',
-        ),
-      ),
+      TournamentTab(controller: widget.controller),
       const SafeArea(
         child: MessageBody(
           icon: Icons.storefront_outlined,

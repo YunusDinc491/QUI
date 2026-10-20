@@ -6,6 +6,9 @@ using SenBilirsin.Modules.Administration;
 using SenBilirsin.Modules.Administration.Api;
 using SenBilirsin.Modules.Catalog;
 using SenBilirsin.Modules.Questions;
+using SenBilirsin.Modules.Tournament;
+using SenBilirsin.Modules.Users;
+using SenBilirsin.Modules.Wallet;
 
 // Geliştirmede depo kökündeki .env dosyasını ortam değişkeni olarak yükle (üretimde yüklenmez)
 DevEnvFile.LoadIfDevelopment();
@@ -16,6 +19,9 @@ builder.Services.AddHealthChecks();
 builder.Services.AddAdministrationModule();
 builder.Services.AddCatalogModule();
 builder.Services.AddQuestionsModule();
+builder.Services.AddUsersModule();      // oyuncu adları (yalnızca okuma)
+builder.Services.AddWalletModule();
+builder.Services.AddTournamentModule(); // iş (dağıtım) mobil API'de çalışır; burada yalnızca yönetim
 
 // Zorluk/durum gibi sıralamalar JSON'da okunur metin olarak ("Easy", "Published") gider ve gelir
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -54,6 +60,7 @@ app.MapAuditEndpoints();
 app.MapUploadEndpoints();
 app.MapCatalogAdminEndpoints();
 app.MapQuestionAdminEndpoints();
+app.MapTournamentAdminEndpoints();
 
 app.Run();
 return 0;
@@ -66,6 +73,9 @@ static class MigrationExtensions
         await services.MigrateAdministrationAsync();
         await services.MigrateCatalogAsync();
         await services.MigrateQuestionsAsync();
+        await services.MigrateUsersAsync();
+        await services.MigrateWalletAsync();
+        await services.MigrateTournamentAsync();
     }
 }
 

@@ -32,3 +32,15 @@ public sealed class PlayerDirectory(UsersDbContext db) : IPlayerDirectory
         return user is null ? null : (user.Id, user.ActiveDeviceId, user.Status);
     }
 }
+
+/// <summary>Toplam puanı (profilde gösterge) artıran dar arayüz; yalnızca turnuva modülü kullanır.</summary>
+public interface IPlayerScores
+{
+    Task AddTotalScoreAsync(Guid userId, long points, CancellationToken ct = default);
+}
+
+public sealed class PlayerScores(UsersDbContext db) : IPlayerScores
+{
+    public Task AddTotalScoreAsync(Guid userId, long points, CancellationToken ct = default) =>
+        db.Users.Where(u => u.Id == userId).ExecuteUpdateAsync(s => s.SetProperty(u => u.TotalScore, u => u.TotalScore + points), ct);
+}

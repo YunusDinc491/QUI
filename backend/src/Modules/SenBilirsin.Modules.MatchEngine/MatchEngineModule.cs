@@ -27,6 +27,7 @@ public static class MatchEngineModule
         services.TryAddSingleton<MatchLocks>();
         services.TryAddSingleton<IRewardedAdGate, TestRewardedAdGate>();
         services.AddScoped<MatchScopeResolver>();
+        services.TryAddScoped<IMatchPointsSink, NullMatchPointsSink>();
         services.AddScoped<SoloMatchService>();
 
         // Rakipli maç (Faz 4). Olay iletici (SignalR) host tarafından kaydedilir; yoksa olaylar yutulur.

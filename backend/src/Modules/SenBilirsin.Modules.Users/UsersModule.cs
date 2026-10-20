@@ -24,6 +24,7 @@ public static class UsersModule
             .UseSnakeCaseNamingConvention());
         services.AddScoped<UserService>();
         services.AddScoped<IPlayerDirectory, PlayerDirectory>();
+        services.AddScoped<IPlayerScores, PlayerScores>();
         return services;
     }
 

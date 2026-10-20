@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../game/game_models.dart';
+import '../game/tournament_models.dart';
 
 /// Geliştirme sunucusu adresi.
 /// Android emülatöründe bilgisayarın localhost'u 10.0.2.2'dir; web ve diğerlerinde localhost.
@@ -207,6 +208,19 @@ class ApiClient {
 
   Future<JokerOutcome> useJoker(String matchId, int position, String type) async => JokerOutcome.fromJson(
       await _send('POST', '/api/matches/$matchId/joker', body: {'position': position, 'type': type}) as Map<String, dynamic>);
+
+  Future<TournamentInfo> fetchTournament() async =>
+      TournamentInfo.fromJson(await _send('GET', '/api/tournament/current') as Map<String, dynamic>);
+
+  Future<PreviousTournament> fetchPreviousTournament() async =>
+      PreviousTournament.fromJson(await _send('GET', '/api/tournament/previous') as Map<String, dynamic>);
+
+  Future<WalletInfo> fetchWallet() async => WalletInfo.fromJson(await _send('GET', '/api/wallet') as Map<String, dynamic>);
+
+  Future<List<PointsHistoryItem>> fetchPointsHistory({int page = 1}) async {
+    final json = await _send('GET', '/api/wallet/history?page=$page') as List<dynamic>;
+    return json.map((e) => PointsHistoryItem.fromJson(e as Map<String, dynamic>)).toList();
+  }
 
   /// Bota karşı oynarken seçilebilecek aktif botlar.
   Future<List<BotInfo>> fetchBots() async {

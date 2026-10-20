@@ -21,4 +21,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SenBilirsin.Modules.Users\SenBilirsin.Modules.Users.csproj" />
+  </ItemGroup>
+
 </Project>
