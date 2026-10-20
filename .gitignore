@@ -1,0 +1,45 @@
+# Gizli bilgiler (CLAUDE.md, mimari ilke 5)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jks
+key.properties
+service-account*.json
+firebase-adminsdk*.json
+
+# Claude yerel ayarları
+.claude/settings.local.json
+
+# .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+*.log
+
+# Node / React
+node_modules/
+dist/
+.vite/
+coverage/
+
+# Flutter / Android
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+.gradle/
+local.properties
+*.iml
+.idea/
+
+# İşletim sistemi / editör
+.DS_Store
+Thumbs.db
