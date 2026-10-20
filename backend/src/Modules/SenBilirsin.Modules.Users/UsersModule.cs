@@ -23,6 +23,7 @@ public static class UsersModule
             .UseNpgsql(sp.GetRequiredService<IConfiguration>().GetConnectionString("Default"), ConfigureNpgsql)
             .UseSnakeCaseNamingConvention());
         services.AddScoped<UserService>();
+        services.AddScoped<IPlayerDirectory, PlayerDirectory>();
         return services;
     }
 

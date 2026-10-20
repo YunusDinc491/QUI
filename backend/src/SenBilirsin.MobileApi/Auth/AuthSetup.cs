@@ -34,7 +34,7 @@ public static class AuthSetup
         auth.AddPolicyScheme(SmartScheme, SmartScheme, options =>
         {
             options.ForwardDefaultSelector = context =>
-                devBypass && context.Request.Headers.Authorization.ToString().StartsWith("Dev ", StringComparison.Ordinal)
+                devBypass && DevAuthHandler.DevCredential(context.Request) is not null
                     ? DevScheme
                     : JwtBearerDefaults.AuthenticationScheme;
         });
@@ -88,8 +88,8 @@ public sealed class DevAuthHandler(
 {
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        var header = Request.Headers.Authorization.ToString();
-        if (!header.StartsWith("Dev ", StringComparison.Ordinal))
+        var header = DevCredential(Request);
+        if (header is null)
             return Task.FromResult(AuthenticateResult.NoResult());
 
         var parts = header["Dev ".Length..]
@@ -112,4 +112,21 @@ public sealed class DevAuthHandler(
     }
 
     private const string DevSchemeName = "DevAuth";
+
+    /// <summary>
+    /// Geliştirme kimliği: <c>Authorization: Dev uid=...</c> başlığı; SignalR istemcileri ise jetonu
+    /// <c>Bearer Dev …</c> ya da /hubs altında <c>?access_token=Dev …</c> olarak gönderir. Yoksa null.
+    /// </summary>
+    public static string? DevCredential(HttpRequest request)
+    {
+        var header = request.Headers.Authorization.ToString();
+        if (header.StartsWith("Dev ", StringComparison.Ordinal)) return header;
+
+        // "Bearer Dev …" ve ?access_token=Dev … yalnızca SignalR bağlantısında (/hubs) kabul edilir; normal uçlarda
+        // Dev kimliği jeton gibi gönderilirse reddedilmeye devam eder (FirebaseTokenTests).
+        if (!request.Path.StartsWithSegments("/hubs")) return null;
+        if (header.StartsWith("Bearer Dev ", StringComparison.Ordinal)) return header["Bearer ".Length..];
+        var token = request.Query["access_token"].ToString();
+        return token.StartsWith("Dev ", StringComparison.Ordinal) ? token : null;
+    }
 }

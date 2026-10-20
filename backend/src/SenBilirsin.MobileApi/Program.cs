@@ -5,6 +5,7 @@ using SenBilirsin.Modules.Catalog;
 using SenBilirsin.Modules.Catalog.Api;
 using SenBilirsin.Modules.MatchEngine;
 using SenBilirsin.Modules.MatchEngine.Api;
+using SenBilirsin.Modules.MatchEngine.Versus;
 using SenBilirsin.Modules.Questions;
 using SenBilirsin.Modules.Users;
 using SenBilirsin.Modules.Users.Api;
@@ -18,10 +19,17 @@ var builder = WebApplication.CreateBuilder(args);
 using var startupLoggerFactory = LoggerFactory.Create(l => l.AddConsole());
 var startupLogger = startupLoggerFactory.CreateLogger("Startup");
 
-builder.Services.AddSignalR();
+// Bağlantı kopmasını hızlı fark etmek için kısa keepalive (docs/04 §1)
+builder.Services.AddSignalR(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromSeconds(7);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(20);
+});
 builder.Services.AddHealthChecks();
 builder.Services.AddSenBilirsinAuthentication(builder.Configuration, builder.Environment, startupLogger);
 builder.Services.AddUsersModule();
+builder.Services.AddSingleton<ConnectionRegistry>();
+builder.Services.AddSingleton<IMatchNotifier, SignalRMatchNotifier>(); // MatchEngine'in yutan varsayılanından önce kaydedilir
 builder.Services.AddCatalogModule();
 builder.Services.AddQuestionsModule();
 builder.Services.AddWalletModule();
@@ -71,7 +79,7 @@ app.MapUsersEndpoints();
 app.MapCatalogEndpoints();
 app.MapMatchEndpoints();
 
-// Faz 0: Flutter <-> SignalR prototipi için echo hub'ı (oyun mantığı Faz 3-4'te gelecek)
+// Oyun hub'ı: rakipli maç (eşleşme, oda, soru akışı). Bireysel maç REST ile (docs/04 §8)
 app.MapHub<GameHub>("/hubs/game");
 
 app.Run();

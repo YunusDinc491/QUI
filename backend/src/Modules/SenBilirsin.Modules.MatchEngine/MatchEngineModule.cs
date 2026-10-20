@@ -6,6 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using SenBilirsin.Modules.MatchEngine.Application;
 using SenBilirsin.Modules.MatchEngine.Data;
 using SenBilirsin.Modules.MatchEngine.Domain;
+using SenBilirsin.Modules.MatchEngine.Versus;
 
 namespace SenBilirsin.Modules.MatchEngine;
 
@@ -25,7 +26,16 @@ public static class MatchEngineModule
         services.TryAddSingleton(new MatchSettings());
         services.TryAddSingleton<MatchLocks>();
         services.TryAddSingleton<IRewardedAdGate, TestRewardedAdGate>();
+        services.AddScoped<MatchScopeResolver>();
         services.AddScoped<SoloMatchService>();
+
+        // Rakipli maç (Faz 4). Olay iletici (SignalR) host tarafından kaydedilir; yoksa olaylar yutulur.
+        services.TryAddSingleton(new VersusSettings());
+        services.TryAddSingleton<IMatchNotifier, NullMatchNotifier>();
+        services.AddScoped<VersusStore>();
+        services.TryAddSingleton<VersusMatchFactory>();
+        services.TryAddSingleton<VersusCoordinator>();
+        services.AddHostedService<VersusLifecycleService>();
         return services;
     }
 
@@ -37,4 +47,10 @@ public static class MatchEngineModule
         using var scope = services.CreateScope();
         await scope.ServiceProvider.GetRequiredService<MatchEngineDbContext>().Database.MigrateAsync(ct);
     }
+}
+
+/// <summary>Olay iletici tanımlanmamışsa (örn. yalnızca admin host) olayları yutar.</summary>
+internal sealed class NullMatchNotifier : IMatchNotifier
+{
+    public Task SendAsync(Guid userId, string eventName, object payload) => Task.CompletedTask;
 }

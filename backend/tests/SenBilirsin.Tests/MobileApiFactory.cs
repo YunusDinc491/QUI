@@ -33,7 +33,12 @@ public sealed class MobileApiFactory : WebApplicationFactory<MobileApiMarker>
         builder.UseEnvironment("Development");
         // Reklamla devam testleri için Faz 3 test kapısı (üretimde kapalıdır)
         builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?> { ["Ads:TestMode"] = "true" }));
-        builder.ConfigureServices(services => services.AddSingleton<TimeProvider>(Clock));
+        builder.ConfigureServices(services =>
+        {
+            services.AddSingleton<TimeProvider>(Clock);
+            // Gerçek zamanlı SignalR testleri hızlı olsun: kısa geri sayım/kuyruk/gösterim süreleri (kurallar aynı)
+            services.AddSingleton(new SenBilirsin.Modules.MatchEngine.Domain.VersusSettings { CountdownSeconds = 1, QueueTimeoutSeconds = 2, RevealDelayMs = 200 });
+        });
     }
 
     private static string BuildTestConnectionString()

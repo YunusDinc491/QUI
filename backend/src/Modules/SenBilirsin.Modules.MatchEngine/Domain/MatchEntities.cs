@@ -6,7 +6,15 @@ namespace SenBilirsin.Modules.MatchEngine.Domain;
 public enum MatchKind
 {
     Solo = 1,
-    // Faz 4: Random, Bot, Friend
+
+    /// <summary>Rastgele eşleşen gerçek rakip.</summary>
+    Random = 2,
+
+    /// <summary>Kullanıcının seçtiği bota karşı.</summary>
+    Bot = 3,
+
+    /// <summary>Davetle gelen arkadaşla (oda).</summary>
+    Friend = 4,
 }
 
 public enum MatchStatus
@@ -51,6 +59,9 @@ public class Match
     public DateTime StartedAt { get; set; }
     public DateTime? EndedAt { get; set; }
 
+    /// <summary>Rakipli maçı kazanan; berabere/iptalde boş (bot kazanırsa bot kimliği).</summary>
+    public Guid? WinnerUserId { get; set; }
+
     /// <summary>Sırası gelen soru (1 tabanlı).</summary>
     public int CurrentPosition { get; set; }
 
@@ -72,6 +83,15 @@ public class MatchPlayer
     public string? Result { get; set; }
 
     public bool ContinueUsed { get; set; }
+
+    /// <summary>Rakip bot ise <see cref="UserId"/> botun profil kimliğidir (puan hiçbir yere işlenmez).</summary>
+    public bool IsBot { get; set; }
+
+    /// <summary>Rakipli maç: puanın bonus kısmı (8+ doğru). <see cref="Points"/> toplamdır.</summary>
+    public int Bonus { get; set; }
+
+    /// <summary>Rakipli maç: kopma havuzundan harcanan süre (ms).</summary>
+    public int DisconnectMsUsed { get; set; }
 
     /// <summary>Puan kesinleşti (devam penceresi kapandı / maç bitti). Faz 5 dönem puanını yalnızca bu satırlardan işler.</summary>
     public DateTime? SettledAt { get; set; }
@@ -127,4 +147,22 @@ public class MatchJoker
     public string ResultJson { get; set; } = "{}";
 
     public DateTime UsedAt { get; set; }
+}
+
+/// <summary>
+/// Bot profili (docs/01 §8). Güç seviyesi doğruluğu, hız aralığı cevap süresini belirler.
+/// Panelden yönetim Faz 8'de; şimdilik başlangıç profilleri migration ile tohumlanır.
+/// </summary>
+public class BotProfile
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = "";
+    public int AvatarId { get; set; }
+
+    /// <summary>1 zayıf, 2 orta, 3 güçlü.</summary>
+    public int Power { get; set; }
+
+    public int SpeedMinMs { get; set; }
+    public int SpeedMaxMs { get; set; }
+    public bool IsActive { get; set; } = true;
 }

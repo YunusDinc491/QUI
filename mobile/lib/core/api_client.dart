@@ -208,6 +208,12 @@ class ApiClient {
   Future<JokerOutcome> useJoker(String matchId, int position, String type) async => JokerOutcome.fromJson(
       await _send('POST', '/api/matches/$matchId/joker', body: {'position': position, 'type': type}) as Map<String, dynamic>);
 
+  /// Bota karşı oynarken seçilebilecek aktif botlar.
+  Future<List<BotInfo>> fetchBots() async {
+    final json = await _send('GET', '/api/bots') as List<dynamic>;
+    return json.map((e) => BotInfo.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
   Future<MatchState> continueMatch(String matchId, String adIntentId) async => MatchState.fromJson(
       await _send('POST', '/api/matches/$matchId/continue', body: {'adIntentId': adIntentId}) as Map<String, dynamic>);
 

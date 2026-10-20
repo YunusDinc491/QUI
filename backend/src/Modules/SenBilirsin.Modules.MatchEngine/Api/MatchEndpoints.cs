@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using SenBilirsin.Modules.MatchEngine.Application;
 using SenBilirsin.Modules.MatchEngine.Domain;
+using SenBilirsin.Modules.MatchEngine.Versus;
 using SenBilirsin.Modules.Users.Api;
 
 namespace SenBilirsin.Modules.MatchEngine.Api;
@@ -25,6 +26,9 @@ public static class MatchEndpoints
 
         api.MapGet("/jokers", async (HttpContext http, SoloMatchService matches, CancellationToken ct) =>
             Results.Ok(await matches.GetJokerBalancesAsync(ActivePlayer.IdOf(http), ct)));
+
+        // Bota karşı oynarken seçilebilecek aktif botlar
+        api.MapGet("/bots", async (VersusCoordinator coordinator) => Results.Ok(await coordinator.ListBotsAsync()));
 
         var group = api.MapGroup("/matches");
 

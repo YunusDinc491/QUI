@@ -25,6 +25,10 @@ public interface IQuestionBank
     Task<PickResult> PickAsync(Guid userId, IReadOnlyCollection<int> categoryIds,
         IReadOnlyList<(Difficulty Difficulty, int Count)> plan, IReadOnlyCollection<int>? excludeIds = null, CancellationToken ct = default);
 
+    /// <summary>Rakipli maç: iki oyuncunun da son gördükleri sorular mümkünse hariç tutulur (docs/01 §3).</summary>
+    Task<PickResult> PickForUsersAsync(IReadOnlyCollection<Guid> userIds, IReadOnlyCollection<int> categoryIds,
+        IReadOnlyList<(Difficulty Difficulty, int Count)> plan, CancellationToken ct = default);
+
     Task<IReadOnlyList<BankQuestion>> GetByIdsAsync(IReadOnlyCollection<int> ids, CancellationToken ct = default);
 
     /// <summary>Soru kullanıcıya gösterildi: görülenlere ekler (son 200 tutulur) ve gösterilme sayacını artırır.</summary>
@@ -40,8 +44,16 @@ public sealed class QuestionBank(QuestionsDbContext db, TimeProvider clock, Rand
 {
     public const int SeenLimit = 200;
 
-    public async Task<PickResult> PickAsync(Guid userId, IReadOnlyCollection<int> categoryIds,
-        IReadOnlyList<(Difficulty Difficulty, int Count)> plan, IReadOnlyCollection<int>? excludeIds = null, CancellationToken ct = default)
+    public Task<PickResult> PickAsync(Guid userId, IReadOnlyCollection<int> categoryIds,
+        IReadOnlyList<(Difficulty Difficulty, int Count)> plan, IReadOnlyCollection<int>? excludeIds = null, CancellationToken ct = default) =>
+        PickCoreAsync([userId], categoryIds, plan, excludeIds, ct);
+
+    public Task<PickResult> PickForUsersAsync(IReadOnlyCollection<Guid> userIds, IReadOnlyCollection<int> categoryIds,
+        IReadOnlyList<(Difficulty Difficulty, int Count)> plan, CancellationToken ct = default) =>
+        PickCoreAsync(userIds, categoryIds, plan, null, ct);
+
+    private async Task<PickResult> PickCoreAsync(IReadOnlyCollection<Guid> userIds, IReadOnlyCollection<int> categoryIds,
+        IReadOnlyList<(Difficulty Difficulty, int Count)> plan, IReadOnlyCollection<int>? excludeIds, CancellationToken ct)
     {
         var candidates = await db.Questions.AsNoTracking()
             .Where(q => q.Status == QuestionStatus.Published && categoryIds.Contains(q.CategoryId))
@@ -49,8 +61,9 @@ public sealed class QuestionBank(QuestionsDbContext db, TimeProvider clock, Rand
             .ToListAsync(ct);
 
         // Görülme sırası (eskiden yeniye): gevşetme gerekirse en eski görülenler önce yeniden verilir
-        var seenOrder = await db.SeenQuestions.AsNoTracking().Where(s => s.UserId == userId)
-            .OrderBy(s => s.SeenAt).Select(s => s.QuestionId).ToListAsync(ct);
+        var seenOrder = await db.SeenQuestions.AsNoTracking().Where(s => userIds.Contains(s.UserId))
+            .GroupBy(s => s.QuestionId).Select(g => new { Id = g.Key, At = g.Max(x => x.SeenAt) })
+            .OrderBy(x => x.At).Select(x => x.Id).ToListAsync(ct);
         var seenRank = seenOrder.Select((id, i) => (id, i)).ToDictionary(x => x.id, x => x.i);
         var excluded = excludeIds is null ? [] : excludeIds.ToHashSet();
 

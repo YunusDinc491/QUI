@@ -244,3 +244,18 @@ class MatchSummary {
         items: (json['items'] as List<dynamic>).map((e) => SummaryItem.fromJson(e as Map<String, dynamic>)).toList(),
       );
 }
+
+/// Bota karşı oyunda seçilebilen bot (güç: 1 zayıf, 2 orta, 3 güçlü).
+class BotInfo {
+  const BotInfo({required this.id, required this.name, required this.avatarId, required this.power});
+
+  final String id;
+  final String name;
+  final int avatarId;
+  final int power;
+
+  String get powerLabel => switch (power) { 1 => 'Zayıf', 2 => 'Orta', _ => 'Güçlü' };
+
+  factory BotInfo.fromJson(Map<String, dynamic> json) =>
+      BotInfo(id: json['id'] as String, name: json['name'] as String, avatarId: json['avatarId'] as int, power: json['power'] as int);
+}

@@ -23,6 +23,77 @@ namespace SenBilirsin.Modules.MatchEngine.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("SenBilirsin.Modules.MatchEngine.Domain.BotProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AvatarId")
+                        .HasColumnType("integer")
+                        .HasColumnName("avatar_id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Power")
+                        .HasColumnType("integer")
+                        .HasColumnName("power");
+
+                    b.Property<int>("SpeedMaxMs")
+                        .HasColumnType("integer")
+                        .HasColumnName("speed_max_ms");
+
+                    b.Property<int>("SpeedMinMs")
+                        .HasColumnType("integer")
+                        .HasColumnName("speed_min_ms");
+
+                    b.HasKey("Id")
+                        .HasName("pk_bot_profiles");
+
+                    b.ToTable("bot_profiles", "matches");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b0000000-0000-0000-0000-000000000001"),
+                            AvatarId = 1,
+                            IsActive = true,
+                            Name = "Çaylak Bot",
+                            Power = 1,
+                            SpeedMaxMs = 12000,
+                            SpeedMinMs = 5000
+                        },
+                        new
+                        {
+                            Id = new Guid("b0000000-0000-0000-0000-000000000002"),
+                            AvatarId = 2,
+                            IsActive = true,
+                            Name = "Dengeli Bot",
+                            Power = 2,
+                            SpeedMaxMs = 10000,
+                            SpeedMinMs = 4000
+                        },
+                        new
+                        {
+                            Id = new Guid("b0000000-0000-0000-0000-000000000003"),
+                            AvatarId = 3,
+                            IsActive = true,
+                            Name = "Usta Bot",
+                            Power = 3,
+                            SpeedMaxMs = 8000,
+                            SpeedMinMs = 3000
+                        });
+                });
+
             modelBuilder.Entity("SenBilirsin.Modules.MatchEngine.Domain.Match", b =>
                 {
                     b.Property<Guid>("Id")
@@ -67,6 +138,10 @@ namespace SenBilirsin.Modules.MatchEngine.Data.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer")
                         .HasColumnName("type");
+
+                    b.Property<Guid?>("WinnerUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("winner_user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_matches");
@@ -177,6 +252,10 @@ namespace SenBilirsin.Modules.MatchEngine.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
+                    b.Property<int>("Bonus")
+                        .HasColumnType("integer")
+                        .HasColumnName("bonus");
+
                     b.Property<bool>("ContinueUsed")
                         .HasColumnType("boolean")
                         .HasColumnName("continue_used");
@@ -184,6 +263,14 @@ namespace SenBilirsin.Modules.MatchEngine.Data.Migrations
                     b.Property<int>("CorrectCount")
                         .HasColumnType("integer")
                         .HasColumnName("correct_count");
+
+                    b.Property<int>("DisconnectMsUsed")
+                        .HasColumnType("integer")
+                        .HasColumnName("disconnect_ms_used");
+
+                    b.Property<bool>("IsBot")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_bot");
 
                     b.Property<int>("Points")
                         .HasColumnType("integer")

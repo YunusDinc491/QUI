@@ -4,6 +4,7 @@ import '../app/app_controller.dart';
 import '../core/api_client.dart';
 import '../game/game_models.dart';
 import '../game/game_screen.dart';
+import '../game/versus_screen.dart';
 import 'category_screen.dart';
 
 /// Oyun için seçilen mod ve alt dal. [categoryId] null ise "Karışık" (modun tüm yayındaki alt dalları)
@@ -68,9 +69,56 @@ class _PlayTabState extends State<PlayTab> {
     if (callback != null) {
       callback(selection);
     } else {
-      startSoloGame(context, widget.controller.api, widget.controller.ads, selection.mode.code, selection.categoryId)
-          .then((_) => mounted ? setState(() => _current = _loadCurrent()) : null);
+      _chooseHowToPlay(selection);
     }
+  }
+
+  /// Mod/alt dal seçildikten sonra oyun türü: bireysel, rastgele rakip ya da arkadaşla (docs/06).
+  Future<void> _chooseHowToPlay(GameSelection selection) async {
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ListTile(title: Text(selection.category?.name ?? (selection.mode.isGeneral ? selection.mode.name : '${selection.mode.name} · Karışık'))),
+          ListTile(key: const Key('play-solo'), leading: const Icon(Icons.person_outline), title: const Text('Bireysel'), subtitle: const Text('Yanlışta elenirsin'), onTap: () => Navigator.pop(context, 'solo')),
+          ListTile(key: const Key('play-random'), leading: const Icon(Icons.people_outline), title: const Text('Rastgele rakip'), subtitle: const Text('10 soru, en çok doğru yapan kazanır'), onTap: () => Navigator.pop(context, 'random')),
+          ListTile(key: const Key('play-friend'), leading: const Icon(Icons.group_add_outlined), title: const Text('Arkadaşla oyna'), subtitle: const Text('Oda kur, kodu gönder'), onTap: () => Navigator.pop(context, 'friend')),
+        ]),
+      ),
+    );
+    if (choice == null || !mounted) return;
+    final api = widget.controller.api;
+    final ads = widget.controller.ads;
+    final mode = selection.mode.code;
+    final category = selection.categoryId;
+    switch (choice) {
+      case 'solo':
+        await startSoloGame(context, api, ads, mode, category);
+      case 'random':
+        await openVersusScreen(context, api, ads, (c) => c.search(mode, category));
+      case 'friend':
+        await openVersusScreen(context, api, ads, (c) => c.createRoom(mode, category));
+    }
+
+    if (mounted) setState(() => _current = _loadCurrent());
+  }
+
+  /// Arkadaşın davet kodunu girip odasına katıl.
+  Future<void> _joinWithCode() async {
+    final field = TextEditingController();
+    final code = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Davet kodu'),
+        content: TextField(key: const Key('room-code-field'), controller: field, autofocus: true, textCapitalization: TextCapitalization.characters, maxLength: 6),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Vazgeç')),
+          FilledButton(onPressed: () => Navigator.pop(context, field.text), child: const Text('Katıl')),
+        ],
+      ),
+    );
+    if (code == null || code.trim().isEmpty || !mounted) return;
+    await openVersusScreen(context, widget.controller.api, widget.controller.ads, (c) => c.joinRoom(code.trim()));
   }
 
   Future<void> _open(CatalogMode mode) async {
@@ -98,6 +146,15 @@ class _PlayTabState extends State<PlayTab> {
           children: [
             Text('Merhaba, $name', style: Theme.of(context).textTheme.headlineSmall, key: const Key('greeting')),
             const SizedBox(height: 16),
+            Card(
+              child: ListTile(
+                key: const Key('join-with-code'),
+                leading: const Icon(Icons.vpn_key_outlined),
+                title: const Text('Koda katıl'),
+                subtitle: const Text('Arkadaşının davet kodu var mı?'),
+                onTap: _joinWithCode,
+              ),
+            ),
             FutureBuilder<MatchState?>(
               future: _current,
               builder: (context, snapshot) {

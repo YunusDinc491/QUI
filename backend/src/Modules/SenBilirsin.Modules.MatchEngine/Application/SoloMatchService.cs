@@ -40,6 +40,7 @@ public sealed class SoloMatchService(
     MatchEngineDbContext db,
     IQuestionBank bank,
     ICatalogQueries catalog,
+    MatchScopeResolver scopeResolver,
     IJokerWallet wallet,
     IRewardedAdGate adGate,
     MatchLocks locks,
@@ -63,7 +64,7 @@ public sealed class SoloMatchService(
                 return MatchResult<MatchState>.Fail("MATCH_IN_PROGRESS", "Devam eden bir maçın var.", 409, ctx.Match.Id);
         }
 
-        var scope = await ResolveScopeAsync(modeCode, categoryId, ct);
+        var scope = await scopeResolver.ResolveAsync(modeCode, categoryId, ct);
         if (scope.Error is not null) return MatchResult<MatchState>.Fail(scope.Error.Value.Code, scope.Error.Value.Message, scope.Error.Value.Status);
 
         var picked = await bank.PickAsync(userId, scope.CategoryIds, MatchPlan.PickPlan(settings), null, ct);
@@ -535,33 +536,4 @@ public sealed class SoloMatchService(
         MatchStatus.Forfeited => "forfeited",
         _ => "unknown",
     };
-
-    private async Task<(string ModeCode, int? CategoryId, IReadOnlyCollection<int> CategoryIds, (string Code, string Message, int Status)? Error)> ResolveScopeAsync(
-        string? modeCode, int? categoryId, CancellationToken ct)
-    {
-        string[] modes = [ModeCodes.General, ModeCodes.Branch, ModeCodes.Kpss, ModeCodes.Fan];
-        if (modeCode is null || !modes.Contains(modeCode)) return ("", null, [], ("MODE_INVALID", "Geçersiz oyun modu.", 400));
-
-        if (modeCode == ModeCodes.General)
-        {
-            var general = await catalog.GetCategoryAsync(1, ct);
-            return general is { IsPublished: true }
-                ? (modeCode, general.Id, [general.Id], null)
-                : (modeCode, null, [], ("MODE_UNAVAILABLE", "Bu mod henüz kullanıma açılmadı.", 409));
-        }
-
-        if (categoryId is { } id)
-        {
-            var category = await catalog.GetCategoryAsync(id, ct);
-            if (category is null || category.ModeCode != modeCode || !category.IsPublished)
-                return (modeCode, null, [], ("CATEGORY_UNAVAILABLE", "Bu kategori bulunamadı ya da kullanıma açık değil.", 404));
-            return (modeCode, id, [id], null);
-        }
-
-        // "Karışık": o moddaki yayındaki tüm alt dallar
-        var published = await catalog.GetPublishedCategoryIdsAsync(modeCode, ct);
-        return published.Count == 0
-            ? (modeCode, null, [], ("MODE_UNAVAILABLE", "Bu modda henüz yayında alt dal yok.", 409))
-            : (modeCode, null, published, null);
-    }
 }
