@@ -1,6 +1,9 @@
 using SenBilirsin.MobileApi.Auth;
 using SenBilirsin.MobileApi.Configuration;
 using SenBilirsin.MobileApi.Hubs;
+using SenBilirsin.Modules.Catalog;
+using SenBilirsin.Modules.Catalog.Api;
+using SenBilirsin.Modules.Questions;
 using SenBilirsin.Modules.Users;
 using SenBilirsin.Modules.Users.Api;
 
@@ -16,6 +19,8 @@ builder.Services.AddSignalR();
 builder.Services.AddHealthChecks();
 builder.Services.AddSenBilirsinAuthentication(builder.Configuration, builder.Environment, startupLogger);
 builder.Services.AddUsersModule();
+builder.Services.AddCatalogModule();
+builder.Services.AddQuestionsModule();
 
 // Flutter web önizlemesi (geliştirme) farklı adresten çağırdığı için CORS: izinli adresler ayardan okunur.
 // Mobil (Android) uygulama CORS'a tabi değildir. Üretimde Cors__AllowedOrigins ile verilir.
@@ -32,7 +37,11 @@ var app = builder.Build();
 
 // Geliştirmede (veya Database:AutoMigrate=true ise) bekleyen migration'ları uygula. Üretimde elle çalıştırılır.
 if (app.Configuration.GetValue<bool>("Database:AutoMigrate"))
+{
     await app.Services.MigrateUsersAsync();
+    await app.Services.MigrateCatalogAsync();
+    await app.Services.MigrateQuestionsAsync();
+}
 
 app.UseCors();
 app.UseAuthentication();
@@ -52,6 +61,7 @@ app.MapGet("/api/config", (IConfiguration config) => Results.Ok(new
 }));
 
 app.MapUsersEndpoints();
+app.MapCatalogEndpoints();
 
 // Faz 0: Flutter <-> SignalR prototipi için echo hub'ı (oyun mantığı Faz 3-4'te gelecek)
 app.MapHub<GameHub>("/hubs/game");

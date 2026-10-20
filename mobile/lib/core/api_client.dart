@@ -91,6 +91,49 @@ class AvatarInfo {
       );
 }
 
+/// Modun alt dalı (örn. Branş → Tarih). Sunucu yalnızca yayındaki kategorileri döndürür.
+class CatalogCategory {
+  CatalogCategory({required this.id, required this.name, this.imageUrl, this.colorHex});
+
+  final int id;
+  final String name;
+  final String? imageUrl;
+  final String? colorHex;
+
+  factory CatalogCategory.fromJson(Map<String, dynamic> json) => CatalogCategory(
+        id: json['id'] as int,
+        name: json['name'] as String,
+        imageUrl: json['imageUrl'] as String?,
+        colorHex: json['colorHex'] as String?,
+      );
+}
+
+/// Oyun modu: general / branch / kpss / fan.
+class CatalogMode {
+  CatalogMode({required this.id, required this.code, required this.name, required this.mixedAvailable, required this.categories});
+
+  final int id;
+  final String code;
+  final String name;
+
+  /// "Karışık" seçeneği gösterilsin mi (sunucu, en az 2 yayında alt dal varsa true döner).
+  final bool mixedAvailable;
+  final List<CatalogCategory> categories;
+
+  /// Genel modun alt dalı yoktur; doğrudan oyuna girilir.
+  bool get isGeneral => code == 'general';
+
+  factory CatalogMode.fromJson(Map<String, dynamic> json) => CatalogMode(
+        id: json['id'] as int,
+        code: json['code'] as String,
+        name: json['name'] as String,
+        mixedAvailable: json['mixedAvailable'] as bool? ?? false,
+        categories: (json['categories'] as List<dynamic>? ?? [])
+            .map((e) => CatalogCategory.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+}
+
 class UsernameCheck {
   UsernameCheck({required this.available, this.code, this.message});
 
@@ -131,6 +174,11 @@ class ApiClient {
   Future<List<AvatarInfo>> fetchAvatars() async {
     final json = await _send('GET', '/api/users/avatars') as List<dynamic>;
     return json.map((e) => AvatarInfo.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<CatalogMode>> fetchCatalog() async {
+    final json = await _send('GET', '/api/catalog/modes') as List<dynamic>;
+    return json.map((e) => CatalogMode.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<Profile> register({

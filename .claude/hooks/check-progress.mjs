@@ -2,6 +2,7 @@
 // Kural kaynağı: CLAUDE.md 0. madde (yapılan her şey, yapıldığı an ilerleme dosyasına yazılır).
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 
 const root = process.env.CLAUDE_PROJECT_DIR || process.cwd();
 const progressFile = path.join(root, 'docs', 'ilerleme.md');
@@ -59,6 +60,20 @@ function block(reason) {
 
 if (!fs.existsSync(progressFile)) {
   block('docs/ilerleme.md bulunamadı. CLAUDE.md 0. madde gereği ilerleme dosyası oluşturulmalı ve yapılan her şey oraya yazılmalı.');
+}
+
+// Kayıp koruması: günlükteki kayıt (### başlığı) sayısı son commit'tekinden az olamaz (günlük append-only)
+const head = spawnSync('git', ['show', 'HEAD:docs/ilerleme.md'], { cwd: root, encoding: 'utf8' });
+if (head.status === 0) {
+  const count = (text) => (text.match(/^### /gm) || []).length;
+  const before = count(head.stdout);
+  const now = count(fs.readFileSync(progressFile, 'utf8'));
+  if (now < before) {
+    block(
+      `docs/ilerleme.md KISALMIŞ: kayıt sayısı ${before} → ${now}. Günlük yalnızca sonuna eklenir. ` +
+        "'git show HEAD:docs/ilerleme.md' ile geri yükle ve kaydı Edit aracıyla ekle.",
+    );
+  }
 }
 
 const progressMtime = fs.statSync(progressFile).mtimeMs;

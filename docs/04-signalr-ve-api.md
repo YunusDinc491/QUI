@@ -88,3 +88,32 @@ Hepsi `Authorization: Bearer <Firebase kimlik jetonu>` ister (geliştirmede `Dev
 
 🔒 = aktif cihaz kontrolü: başka cihaz aktifse `401 {"code":"SESSION_REPLACED"}`.
 Hata gövdesi: `{ "code": "...", "message": "Türkçe açıklama" }`.
+
+## 7. Gerçekleşen uçlar — Faz 2 (2026-10-21)
+
+### Mobil API
+
+| Uç | Açıklama |
+|---|---|
+| `GET /api/catalog/modes` 🔐 | 4 mod ve her birinin **yayındaki** alt dalları: `[{id, code, name, mixedAvailable, categories:[{id, name, imageUrl, colorHex}]}]`. `mixedAvailable`: Genel dışındaki modlarda ≥2 yayında alt dal varsa true ("Karışık"). Genel modun kategorisi yayınlanmadıkça listede görünmez; istemci Genel'e doğrudan girer. |
+
+### Admin API (ayrı host; hepsi `Authorization: Bearer <admin JWT>`, rol `admin`; giriş hariç)
+
+JSON'da sıralamalar metin: zorluk `Easy|Medium|Hard`, durum `Draft|Published|Archived`. Hata gövdesi `{code, message}`; tekrar şüphesinde ayrıca `duplicates`.
+
+| Uç | Açıklama |
+|---|---|
+| `POST /api/auth/login` (anonim) | `{email, password, code}` → `{token, expiresAt}`. Hatada hangi alanın yanlış olduğu söylenmez (401); 5 ardışık hatada 15 dk kilit (429). Aynı TOTP kodu ikinci kez kabul edilmez. |
+| `GET /api/auth/me`, `POST /api/auth/change-password` | Oturumdaki yönetici; parola değiştirme (≥12 karakter) |
+| `GET /api/categories` | Tüm kategoriler + soru sayıları `{easy, medium, hard (yayındakiler), draft, archived}` |
+| `POST /api/categories`, `PUT /api/categories/{id}` | `{modeId, name, imageUrl?, colorHex?, order?}`. Aynı modda aynı ad 409; Genel modda yeni kategori eklenemez |
+| `POST /api/categories/{id}/publish`, `…/unpublish` | Yayınla / gizle (soru sayısına bağlı engel yok) |
+| `GET /api/questions` | `categoryId, difficulty, status, search, page, pageSize(≤100)` |
+| `GET/POST /api/questions`, `PUT /api/questions/{id}` | `{categoryId, text, options[4], correctIndex(0–3), difficulty, explanation?, status?, ignoreDuplicates?}`. Benzer soru varsa `409 DUPLICATE_SUSPECTED` |
+| `POST /api/questions/{id}/status` | `{status}` — yayınla / taslağa al / arşivle (silme yok) |
+| `POST /api/questions/check-duplicate` | `{categoryId, text, excludeId?}` → `{duplicates}` (form içinde anlık uyarı) |
+| `POST /api/questions/import/preview`, `…/import/commit` | CSV toplu yükleme: `{csv}` / `{csv, includeDuplicates, publish}`. Sütunlar: `mod;kategori;zorluk;soru;A;B;C;D;dogru;aciklama` (ayraç `;` `,` ya da sekme otomatik; en çok 500 satır). Önizleme satır satır `ok/error/duplicate` döndürür. **Şimdilik yalnızca CSV** (Excel'den "CSV UTF-8" olarak kaydedilir). |
+| `POST /api/uploads/image?folder=categories\|avatars\|frames` | Çok parçalı form, alan `file`. PNG/JPEG/WebP (ilk baytlardan doğrulanır, SVG yok), ≤1 MB → `{key, url}`. Yerel depoda `/uploads/…` altında sunulur; üretimde Cloudflare R2. |
+| `GET /api/audit-logs` | `action, entity, page, pageSize(≤200)`; her yazma işleminin önce/sonra kaydı |
+
+Yerel komutlar (AdminApi, sunucu başlatmaz): `-- create-admin <e-posta>` (rastgele parola + TOTP anahtarı → yalnızca `.local/` altındaki git dışı dosya), `-- seed-samples` (yalnızca Development; 60 örnek soru).

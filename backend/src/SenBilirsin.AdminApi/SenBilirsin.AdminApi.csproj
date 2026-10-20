@@ -15,6 +15,11 @@
     <ProjectReference Include="..\Modules\SenBilirsin.Modules.Wallet\SenBilirsin.Modules.Wallet.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Geliştirme örnek soruları: "seed-samples" komutu bunu okur -->
+    <None Include="Seed\sample-questions.csv" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>

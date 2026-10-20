@@ -1,0 +1,61 @@
+mod;kategori;zorluk;soru;A;B;C;D;dogru;aciklama
+genel;;kolay;Türkiye'nin başkenti neresidir?;İstanbul;Ankara;İzmir;Bursa;B;
+genel;;kolay;Bir haftada kaç gün vardır?;5;6;7;8;C;
+genel;;kolay;Güneş Sistemi'ndeki en büyük gezegen hangisidir?;Mars;Jüpiter;Satürn;Dünya;B;
+genel;;kolay;Suyun kimyasal formülü nedir?;CO2;H2O;O2;NaCl;B;
+genel;;kolay;Bir yılda kaç ay vardır?;10;11;12;13;C;
+genel;;kolay;Hangi hayvan "ormanların kralı" olarak bilinir?;Kaplan;Aslan;Fil;Ayı;B;
+genel;;kolay;Gökkuşağında kaç renk vardır?;5;6;7;8;C;
+genel;;kolay;Türkiye'nin nüfusça en kalabalık şehri hangisidir?;Ankara;İzmir;Bursa;İstanbul;D;
+genel;;kolay;Dünya'nın doğal uydusu hangisidir?;Ay;Güneş;Mars;Venüs;A;
+genel;;kolay;5 + 7 işleminin sonucu kaçtır?;10;11;12;13;C;
+genel;;kolay;Kanı vücuda pompalayan organ hangisidir?;Akciğer;Kalp;Karaciğer;Böbrek;B;
+genel;;kolay;Türk bayrağındaki hilal ve yıldızın rengi nedir?;Sarı;Beyaz;Siyah;Mavi;B;
+genel;;kolay;Aşağıdakilerden hangisi bir meyvedir?;Havuç;Patates;Elma;Soğan;C;
+genel;;kolay;Bir futbol takımı sahada kaleci dahil kaç oyuncuyla oynar?;9;10;11;12;C;
+genel;;orta;Dünyanın en büyük okyanusu hangisidir?;Hint Okyanusu;Atlas Okyanusu;Pasifik (Büyük) Okyanusu;Arktik Okyanusu;C;
+genel;;orta;Işık yılı aşağıdakilerden hangisinin birimidir?;Zaman;Uzaklık;Hız;Kütle;B;Işık yılı, ışığın bir yılda aldığı yoldur.
+genel;;orta;Periyodik tabloda "Au" simgesi hangi elementi gösterir?;Gümüş;Altın;Alüminyum;Argon;B;
+genel;;orta;Yetişkin bir insanın vücudunda kaç kemik bulunur?;106;206;306;406;B;
+genel;;orta;"Mona Lisa" tablosunun ressamı kimdir?;Michelangelo;Van Gogh;Leonardo da Vinci;Picasso;C;
+genel;;orta;Bir üçgenin iç açılarının toplamı kaç derecedir?;90;180;270;360;B;
+genel;;orta;Bitkiler fotosentez sırasında havadan hangi gazı alır?;Oksijen;Azot;Karbondioksit;Hidrojen;C;
+genel;;orta;İnsan vücudundaki en büyük organ hangisidir?;Karaciğer;Deri;Akciğer;Kalın bağırsak;B;
+genel;;orta;Sanayi Devrimi hangi ülkede başlamıştır?;Fransa;Almanya;İngiltere;ABD;C;
+genel;;orta;Periyodik tabloda atom numarası 1 olan element hangisidir?;Helyum;Hidrojen;Lityum;Karbon;B;
+genel;;zor;Nobel Edebiyat Ödülü'nü kazanan ilk Türk yazar kimdir?;Yaşar Kemal;Orhan Pamuk;Nazım Hikmet;Elif Şafak;B;Orhan Pamuk bu ödülü 2006 yılında almıştır.
+genel;;zor;DNA'nın açılımı nedir?;Deoksiribonükleik asit;Ribonükleik asit;Dinitrojen asit;Deoksinükleotit amino;A;
+genel;;zor;Mikroskobik canlıları ilk gözlemleyen kişi olarak bilinen Hollandalı bilim insanı kimdir?;Louis Pasteur;Robert Koch;Anton van Leeuwenhoek;Alexander Fleming;C;
+genel;;zor;Aşağıdaki sayılardan hangisi asal sayı değildir?;17;19;21;23;C;21 = 3 × 7 olduğu için asal değildir.
+genel;;zor;Rönesans'ın beşiği olarak kabul edilen İtalyan şehri hangisidir?;Floransa;Napoli;Torino;Cenova;A;
+genel;;zor;Işığın boşluktaki hızı yaklaşık olarak saniyede kaç kilometredir?;30.000;300.000;3.000.000;150.000;B;
+branş;Tarih;kolay;Türkiye Cumhuriyeti hangi yılda ilan edilmiştir?;1920;1923;1938;1919;B;Cumhuriyet 29 Ekim 1923'te ilan edilmiştir.
+branş;Tarih;kolay;Türkiye Cumhuriyeti'nin ilk cumhurbaşkanı kimdir?;İsmet İnönü;Mustafa Kemal Atatürk;Celal Bayar;Cemal Gürsel;B;
+branş;Tarih;kolay;İstanbul'u fetheden Osmanlı padişahı kimdir?;Yavuz Sultan Selim;Kanuni Sultan Süleyman;II. Mehmed (Fatih);I. Murad;C;
+branş;Tarih;kolay;İstanbul'un fethi hangi yıl gerçekleşmiştir?;1071;1299;1453;1517;C;
+branş;Tarih;kolay;Mustafa Kemal'in Samsun'a çıkarak Kurtuluş Savaşı'nı başlattığı tarih hangisidir?;23 Nisan 1920;19 Mayıs 1919;30 Ağustos 1922;29 Ekim 1923;B;
+branş;Tarih;kolay;29 Ekim hangi bayram olarak kutlanır?;Zafer Bayramı;Cumhuriyet Bayramı;Ulusal Egemenlik ve Çocuk Bayramı;Gençlik ve Spor Bayramı;B;
+branş;Tarih;kolay;Türkiye Büyük Millet Meclisi hangi tarihte açılmıştır?;19 Mayıs 1919;23 Nisan 1920;30 Ağustos 1922;29 Ekim 1923;B;
+branş;Tarih;kolay;Osmanlı Devleti'nin kurucusu kimdir?;Osman Bey;Orhan Bey;Ertuğrul Gazi;I. Murad;A;
+branş;Tarih;kolay;Anadolu'nun kapılarını Türklere açan savaş hangisidir?;Çaldıran;Malazgirt;Mohaç;Preveze;B;
+branş;Tarih;kolay;Çanakkale Deniz Zaferi hangi yıl kazanılmıştır?;1914;1915;1916;1918;B;18 Mart 1915'te kazanılmıştır.
+branş;Tarih;kolay;Zafer Bayramı olarak kutlanan Başkomutanlık Meydan Muharebesi'nin zaferi hangi tarihtir?;9 Eylül;30 Ağustos;29 Ekim;18 Mart;B;
+branş;Tarih;kolay;Lozan Barış Antlaşması hangi yılda imzalanmıştır?;1920;1921;1923;1925;C;
+branş;Tarih;orta;Osmanlı'da "Lale Devri" hangi padişah döneminde yaşanmıştır?;III. Ahmed;Kanuni Sultan Süleyman;IV. Murad;II. Abdülhamid;A;
+branş;Tarih;orta;Mohaç Meydan Muharebesi (1526) hangi padişah döneminde yapılmıştır?;Yavuz Sultan Selim;Kanuni Sultan Süleyman;II. Bayezid;III. Mehmed;B;
+branş;Tarih;orta;Tanzimat Fermanı hangi yıl ilan edilmiştir?;1808;1839;1876;1908;B;
+branş;Tarih;orta;Birinci Meşrutiyet hangi padişah döneminde ilan edilmiştir?;II. Mahmud;Abdülmecid;II. Abdülhamid;V. Mehmed Reşad;C;
+branş;Tarih;orta;Misak-ı Millî hangi meclis tarafından kabul edilmiştir?;TBMM;Meclis-i Mebusan;Heyet-i Temsiliye;Sivas Kongresi;B;
+branş;Tarih;orta;Sevr Antlaşması hangi yılda imzalanmıştır?;1918;1919;1920;1923;C;
+branş;Tarih;orta;Soyadı Kanunu hangi yılda çıkarılmıştır?;1928;1930;1934;1938;C;
+branş;Tarih;orta;Latin alfabesine geçiş (Harf Devrimi) hangi yıl gerçekleşmiştir?;1923;1925;1928;1934;C;
+branş;Tarih;orta;Türk kadınına milletvekili seçme ve seçilme hakkı hangi yıl tanınmıştır?;1930;1934;1938;1945;B;
+branş;Tarih;orta;Ridaniye Savaşı sonucunda Osmanlı Devleti hangi devleti ortadan kaldırmıştır?;Safeviler;Memlûkler;Bizans;Karamanoğulları;B;
+branş;Tarih;zor;Preveze Deniz Savaşı'nda (1538) Osmanlı donanmasının komutanı kimdir?;Piri Reis;Turgut Reis;Barbaros Hayreddin Paşa;Kılıç Ali Paşa;C;
+branş;Tarih;zor;Hititler ile Mısırlılar arasında imzalanan ve bilinen ilk yazılı antlaşma sayılan antlaşma hangisidir?;Kadeş Antlaşması;Lozan Antlaşması;Sevr Antlaşması;Mudanya Ateşkesi;A;
+branş;Tarih;zor;Mudanya Ateşkes Antlaşması hangi yılda imzalanmıştır?;1920;1921;1922;1923;C;
+branş;Tarih;zor;Osmanlı Devleti'nin Avrupa'da büyük toprak kaybettiği ilk antlaşma olarak kabul edilen antlaşma hangisidir?;Zitvatorok;Karlofça;Pasarofça;Küçük Kaynarca;B;
+branş;Tarih;zor;Kanuni Sultan Süleyman hangi sefer sırasında vefat etmiştir?;Mohaç;Zigetvar;Rodos;Belgrad;B;
+branş;Tarih;zor;Erzurum Kongresi hangi yıl toplanmıştır?;1918;1919;1920;1921;B;
+branş;Tarih;zor;Atatürk'ün Nutuk'u hangi yıl okunmuştur?;1923;1925;1927;1930;C;
+branş;Tarih;zor;Halifelik hangi yıl kaldırılmıştır?;1922;1923;1924;1925;C;Saltanat 1922'de, halifelik 3 Mart 1924'te kaldırılmıştır.

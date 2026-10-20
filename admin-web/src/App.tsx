@@ -1,35 +1,68 @@
 import { useEffect, useState } from 'react'
+import { api, AUTH_LOST_EVENT, getToken, setToken } from './api.ts'
+import { useRoute } from './route.ts'
+import { Audit } from './pages/Audit.tsx'
+import { Categories } from './pages/Categories.tsx'
+import { Import } from './pages/Import.tsx'
+import { Login } from './pages/Login.tsx'
+import { QuestionForm } from './pages/QuestionForm.tsx'
+import { Questions } from './pages/Questions.tsx'
 
-// Admin API adresi: .env içinde VITE_ADMIN_API_URL ile değiştirilir (bkz. .env.example)
-const API_URL = import.meta.env.VITE_ADMIN_API_URL ?? 'http://localhost:5090'
-
-type Status = 'checking' | 'ok' | 'error'
-
-const STATUS_TEXT: Record<Status, string> = {
-  checking: 'kontrol ediliyor...',
-  ok: 'ÇALIŞIYOR',
-  error: 'ULAŞILAMADI',
-}
-
-// Faz 0 iskeleti: ham ve işlevsel ekran (tasarım en sona bırakıldı, K-53)
+// Yönetim paneli kabuğu: giriş kapısı + üst menü + sayfa seçimi.
+// Tasarım en sona bırakıldı (K-53); ekranlar işlevsel ve sade.
 function App() {
-  const [status, setStatus] = useState<Status>('checking')
+  const [loggedIn, setLoggedIn] = useState(() => getToken() !== null)
+  const [email, setEmail] = useState('')
+  const route = useRoute()
 
   useEffect(() => {
-    fetch(`${API_URL}/health`)
-      .then((response) => response.text())
-      .then((text) => setStatus(text === 'Healthy' ? 'ok' : 'error'))
-      .catch(() => setStatus('error'))
+    const onLost = () => setLoggedIn(false)
+    window.addEventListener(AUTH_LOST_EVENT, onLost)
+    return () => window.removeEventListener(AUTH_LOST_EVENT, onLost)
   }, [])
 
+  useEffect(() => {
+    if (!loggedIn) return
+    api.get<{ email: string }>('/api/auth/me').then((me) => setEmail(me.email)).catch(() => undefined)
+  }, [loggedIn])
+
+  if (!loggedIn) return <Login onLoggedIn={() => setLoggedIn(true)} />
+
+  function logout() {
+    setToken(null)
+    setLoggedIn(false)
+  }
+
+  const [section, id] = route.segments
+  const active = section ?? 'questions'
+
+  let page
+  if (active === 'categories') page = <Categories />
+  else if (active === 'import') page = <Import />
+  else if (active === 'audit') page = <Audit />
+  else if (id === 'new') page = <QuestionForm />
+  else if (id && /^\d+$/.test(id)) page = <QuestionForm key={id} questionId={Number(id)} />
+  else {
+    const categoryId = route.params.get('categoryId')
+    page = <Questions key={categoryId ?? 'all'} initialCategoryId={categoryId ? Number(categoryId) : undefined} />
+  }
+
   return (
-    <main>
-      <h1>QU¿ Yönetim Paneli</h1>
-      <p>Faz 0 iskeleti. Giriş, soru yönetimi ve diğer bölümler sonraki fazlarda eklenecek.</p>
-      <p>
-        Admin API ({API_URL}): <strong data-testid="api-status">{STATUS_TEXT[status]}</strong>
-      </p>
-    </main>
+    <div className="shell">
+      <header>
+        <strong className="brand">QU¿ Yönetim</strong>
+        <nav>
+          <a href="#/questions" className={active === 'questions' && id !== 'new' ? 'active' : ''}>Sorular</a>
+          <a href="#/questions/new" className={id === 'new' ? 'active' : ''}>Yeni soru</a>
+          <a href="#/categories" className={active === 'categories' ? 'active' : ''}>Kategoriler</a>
+          <a href="#/import" className={active === 'import' ? 'active' : ''}>Toplu yükleme</a>
+          <a href="#/audit" className={active === 'audit' ? 'active' : ''}>Denetim</a>
+        </nav>
+        <span className="who">{email}</span>
+        <button type="button" className="secondary" onClick={logout}>Çıkış</button>
+      </header>
+      <main>{page}</main>
+    </div>
   )
 }
 

@@ -43,3 +43,6 @@ local.properties
 # İşletim sistemi / editör
 .DS_Store
 Thumbs.db
+
+# Yerel gizli çıktılar (ilk admin giriş bilgisi vb.)
+.local/
