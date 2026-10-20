@@ -1,0 +1,6 @@
+/* Faz 0: bilerek sade. Tasarım en sona bırakıldı (K-53). */
+body {
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 24px;
+}
