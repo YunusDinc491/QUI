@@ -346,6 +346,19 @@
 - **Durum:** Ad değişikliği tamamlandı; değişiklikler **commit edilmedi** (kullanıcı istediğinde atılacak).
 - **Sıradaki adım:** Faz 2, Parça 2.1: Katalog modülü (mod/alt dal tabloları, 4 mod tohumu, yayındaki kategoriler ucu, testler).
 
+### 2026-10-21 00:39 — Gece çalışması anlaşması ve hazırlık (kullanıcı uykuya geçiyor; Faz 2→9 özerk çalışma)
+- **Faz:** Hazırlık (Faz 2 öncesi)
+- **Anlaşma (kullanıcı, 2026-10-21):** (a) GitHub deposu `https://github.com/YunusDinc491/QUI.git` oluşturuldu; **her fazdan sonra commit serbest**; her faz sonunda ilerleme dosyasına kayıt. (b) Gerçek para veya yasal sorun doğurabilecek iş yapılmayacak (kullanıcıya göre zaten yok). (c) Faz 9 dahil yapılacak; sabaha kullanıcıya yalnızca **tasarım** ve **açılması gereken hesaplar/zorunlu işler** kalacak. (d) Saatlik limit dolarsa bekleyip yenilenince devam edilecek. (e) Haftalık limit dolmasın diye token tüketimine dikkat edilecek.
+- **Yapılanlar:** (1) `request_keep_awake(until=session_idle)` → "Keeping this computer awake across follow-up turns, until the session has been idle for about 5 minutes" (kapak kapatma/elle uyku engellenmez). (2) `.claude/settings.local.json` oluşturuldu: `{"autoContinueAtUsageLimit": true}` (git'e girmez, `check-ignore` doğruladı). **Çalışıp çalışmadığı doğrulanmadı** (limite çarpılınca görülecek). (3) `git remote add origin https://github.com/YunusDinc491/QUI.git` (yerel ayar; **push YAPILMADI**). (4) Bekleyen 20 değişiklik commit'lendi: **`be68759`** "Uygulama adı QU¿, çalışma planı ve yeni çalışma kuralları".
+- **Push kararı:** `gh auth status` → `YunusDinc491` olarak giriş yapılmış (`repo` kapsamıyla). `gh repo view` → **visibility = PUBLIC, isEmpty = true**. Public repoya push; kaynak kodu, `docs/` planlarını (ekonomi/güvenlik), günlüğü, commit'lerdeki e-postayı ve `google-services.json`'u herkese açar → **kullanıcı onayı gelene kadar push yapılmayacak.** Öneri: repoyu private yapmak (`gh repo edit YunusDinc491/QUI --visibility private --accept-visibility-change-consequences`), sonra push.
+- **Kullanım ölçümü (`get_usage`, 00:39):** plan **Pro**; 5 saatlik pencere **%22** (sıfırlanma 03:50 yerel), **haftalık %44** (sıfırlanma **10:00 yerel**); bu oturumun bağlamı 878K/1M token (%88; %97'de otomatik özetlenir). Not: bu kadar uzun bağlamda her işlem pahalı; özetlemeden sonra maliyet düşecek. Gerçekçi beklenti: tamamı ~25–30 saatlik iş; Pro limitleri nedeniyle tek gecede muhtemelen Faz 2–3 (+4 başlangıcı) biter, kalan fazlar ertesi günlere/haftaya yayılabilir.
+- **Koruma kuralı (token/limit):** Her parça grubunun/fazın başında `get_usage` okunur (küçük çıktı). **Haftalık ≥ %85** ise yeni parça başlatılmaz, mevcut parça temiz bitirilir, durum "Yarım kalan"a yazılır ve durulur. 5 saatlik pencere dolarsa beklenir/otomatik devam edilir. **Yerel saat 09:45'ten sonra** (haftalık sıfırlanma 10:00) büyük iş başlatılmaz; sabah için bütçe bırakılır. Ekran görüntüsü yalnızca faz sonlarında ve küçük boyutta; çıktılar `tail/grep` ile kırpılır; yazılan dosya geri okunmaz.
+- **Yapılmayacaklar:** push (public repo), hesap açma/ödeme/satın alma/alan adı alma, dışarıya e-posta/mesaj, gerçek reklam veya kupon, yasal beyan; yasal metinler yalnızca **taslak**. Kararlar md'de değiştirilmez; belirsizlikte makul varsayılan seçilip günlüğe "varsayım" yazılır.
+- **Değişen dosyalar:** `.claude/settings.local.json` (yeni, git dışı), `docs/ilerleme.md`; git: `origin` remote, commit `be68759`.
+- **Doğrulama:** `git log` → `be68759` en üstte; `git status` → 0 değişiklik; `git remote -v` → origin tanımlı.
+- **Sorun / çözüm:** Yok.
+- **Sıradaki adım:** Faz 2, Parça 2.1 (Katalog modülü).
+
 <!-- KAYIT-SONU -->
 
 ---
