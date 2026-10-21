@@ -52,6 +52,8 @@ public class MobileApiFactory : WebApplicationFactory<MobileApiMarker>
         {
             ["Ads:TestMode"] = "true",
             ["Tournament:Jobs"] = "false",
+            ["Store:Jobs"] = "false",
+            ["Coupons:EncryptionKey"] = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)),
             ["ConnectionStrings:Default"] = ConnectionString, // bellek içi ayar ortam değişkenini ezer: her fabrika kendi veritabanını kullanır
         }));
         builder.ConfigureServices(services =>

@@ -7,6 +7,8 @@ using SenBilirsin.Modules.MatchEngine;
 using SenBilirsin.Modules.MatchEngine.Api;
 using SenBilirsin.Modules.MatchEngine.Versus;
 using SenBilirsin.Modules.Questions;
+using SenBilirsin.Modules.Store;
+using SenBilirsin.Modules.Store.Api;
 using SenBilirsin.Modules.Tournament;
 using SenBilirsin.Modules.Tournament.Api;
 using SenBilirsin.Modules.Users;
@@ -38,6 +40,8 @@ builder.Services.AddQuestionsModule();
 builder.Services.AddWalletModule();
 builder.Services.AddMatchEngineModule();
 builder.Services.AddTournamentModule();
+builder.Services.AddStoreModule();
+builder.Services.AddStoreJobs(); // yarım kalan kupon satın almalarını toparlar
 builder.Services.AddTournamentJobs(); // dönem açma + kapanışta ödül dağıtımı (tek instance)
 
 // Flutter web önizlemesi (geliştirme) farklı adresten çağırdığı için CORS: izinli adresler ayardan okunur.
@@ -62,6 +66,7 @@ if (app.Configuration.GetValue<bool>("Database:AutoMigrate"))
     await app.Services.MigrateWalletAsync();
     await app.Services.MigrateMatchEngineAsync();
     await app.Services.MigrateTournamentAsync();
+    await app.Services.MigrateStoreAsync();
 }
 
 app.UseCors();
@@ -86,6 +91,7 @@ app.MapCatalogEndpoints();
 app.MapMatchEndpoints();
 app.MapTournamentEndpoints();
 app.MapWalletEndpoints();
+app.MapStoreEndpoints();
 
 // Oyun hub'ı: rakipli maç (eşleşme, oda, soru akışı). Bireysel maç REST ile (docs/04 §8)
 app.MapHub<GameHub>("/hubs/game");

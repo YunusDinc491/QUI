@@ -12,6 +12,9 @@ public interface IPointsWallet
 {
     Task<long> GetBalanceAsync(Guid userId, CancellationToken ct = default);
 
+    /// <summary>Bu işlem anahtarıyla defterde kayıt var mı (yarım kalan işlemleri toparlamak için).</summary>
+    Task<bool> HasEntryAsync(string idempotencyKey, CancellationToken ct = default);
+
     Task<IReadOnlyList<PointsHistoryItem>> GetHistoryAsync(Guid userId, int page, int pageSize, CancellationToken ct = default);
 
     /// <summary>Puan ekler (turnuva ödülü, iade, admin). Aynı anahtar ikinci kez eklemez; eklendiyse true.</summary>
@@ -32,6 +35,9 @@ public sealed class PointsWallet(WalletDbContext db, TimeProvider clock) : IPoin
 {
     public async Task<long> GetBalanceAsync(Guid userId, CancellationToken ct = default) =>
         await db.PointsLedger.AsNoTracking().Where(x => x.UserId == userId).SumAsync(x => (long?)x.Amount, ct) ?? 0;
+
+    public Task<bool> HasEntryAsync(string idempotencyKey, CancellationToken ct = default) =>
+        db.PointsLedger.AsNoTracking().AnyAsync(x => x.IdempotencyKey == idempotencyKey, ct);
 
     public async Task<IReadOnlyList<PointsHistoryItem>> GetHistoryAsync(Guid userId, int page, int pageSize, CancellationToken ct = default)
     {
