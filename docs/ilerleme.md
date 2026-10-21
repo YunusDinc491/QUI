@@ -574,6 +574,12 @@
 - **Test edilmeyen:** mobil mağaza arayüzü, admin paneli sayfası/uçları, avatar sahipliğinin profil seçiminde zorunlu kılınması (Users modülü şimdilik yalnızca avatarın var/aktif olduğunu doğruluyor) — sıradaki parçalarda.
 - **Sıradaki adım:** Parça 6.4: Admin API (ürün/kod/sorun uçları) + admin web sayfası; 6.5: avatar/çerçeve sahipliği doğrulaması (Users); 6.6: mobil Mağaza sekmesi + Ödüllerim (uyarılı kod gösterimi, sorun bildirme).
 
+### 2026-10-21 03:03 — Faz 6, Parça 6.4: Mağaza admin API (kullanım sınırı nedeniyle burada duruldu)
+- **Ne yapıldı:** AdminApi'ye mağaza yönetimi: `GET/POST /api/store/products`, `PUT /api/store/products/{id}`, `POST /api/store/products/{id}/codes` (satır satır metin ya da dizi, en çok 5000; kodlar şifrelenir, **hiçbir yanıtta ve denetim kaydında kod yok**), `GET /api/store/issues` (açık "kod çalışmıyor" kuyruğu, kullanıcı başına aldığı kod/bildirdiği sorun sayısıyla), `POST /api/store/issues/{rewardId}/resolve {replace}` (yeni kod ya da reddet; ayda 1 değişim). AdminApi `AddStoreModule` + mağaza migration'ını da uygular (`Coupons__EncryptionKey` mobil API ile aynı olmalı). Her yazma denetim kaydına düşer.
+- **Doğrulama:** `dotnet test` **389/389** (386 + 3 admin mağaza testi: girişsiz 401; ürün doğrulama/oluşturma/güncelleme/kupon dışı ürüne kod reddi/yükleme sayımı/kodların yanıtta ve denetimde bulunmaması; sorun kuyruğu + değişim + kullanıcı yeni kodu görür + ikinci çözüm 409).
+- **Yapılmayanlar (Faz 6 kalanı):** admin web mağaza sayfası; avatar/çerçeve sahipliğinin profil seçiminde zorunlu kılınması (Users); mobil Mağaza sekmesi + Ödüllerim (uyarılı kod gösterimi, sorun bildirme); docs/04 Faz 6 uç listesi ve docs/09 satırı. **Sonraki fazlar (7, 8, 9) başlanmadı.**
+- **Neden duruldu:** Claude kullanım sınırına ulaşıldı (5 saatlik pencere); sabah kaldığı yerden sürdürülecek.
+
 <!-- KAYIT-SONU -->
 
 ---
@@ -581,7 +587,7 @@
 ## Yarım kalan / sıradaki adım
 
 - **Çalışma modu:** Gece özerk çalışma (kullanıcı uyuyor). Faz 2 → 9 sırayla, küçük parçalar, her parçada test; her faz sonunda commit + günlük. **Push serbest** (kullanıcı onayı: repo `YunusDinc491/QUI` bilerek public; yalnızca gizli bilgi taramasından sonra). Koruma kuralları: 2026-10-21 00:39 kaydı.
-- **Şu an:** Faz 6 (mağaza) sürüyor: backend çekirdeği tamam (6.1–6.3); sırada admin API/sayfası, avatar sahipliği, mobil Mağaza sekmesi.
+- **Şu an:** DURDU (Claude kullanım sınırı, 03:03). Faz 6'nın kalanı: admin web mağaza sayfası, avatar/çerçeve sahipliği doğrulaması, mobil Mağaza sekmesi + Ödüllerim, docs/04+09 güncellemesi. Sonra Faz 7, 8, 9.
 - **Faz 0:** Kabul edildi. Ertelenen: Railway, Cloudflare Pages, GitHub otomatik deploy.
 - **Faz 1:** Backend + mobil ekranlar + Firebase kodu **tamam**; kalan: kullanıcının gerçek giriş denemesi (e-posta + Google) ve Faz 1 kabulü. Uygulama adı QU¿; paket `com.senbilirsin.app`; Firebase proje `senbilirsin-832b8`.
 - **Faz 2:** Tamam (geliştirme ortamında). Kullanıcı kabulü bekliyor. Panel: `admin-api` (5090) + `admin-web` (5173); yerel yönetici `admin@qui.local`, giriş bilgileri `.local/admin-admin_qui.local.txt` (git dışı; TOTP anahtarını kimlik doğrulayıcı uygulamaya elle ekle). Geliştirme veritabanında 60 örnek soru var (`-- seed-samples`).

@@ -50,6 +50,7 @@ public sealed class AdminApiFactory : WebApplicationFactory<AdminApiMarker>
             ["Database:AutoMigrate"] = "true",
             ["Storage:LocalPath"] = UploadsPath,
             ["Storage:PublicBaseUrl"] = "http://test.local/uploads",
+            ["Coupons:EncryptionKey"] = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)),
             // Yalnızca testlere özel, rastgele üretilmiş anahtarlar
             ["Admin:SecretKey"] = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)),
             ["Admin:JwtKey"] = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(48)),

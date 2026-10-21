@@ -6,6 +6,7 @@ using SenBilirsin.Modules.Administration;
 using SenBilirsin.Modules.Administration.Api;
 using SenBilirsin.Modules.Catalog;
 using SenBilirsin.Modules.Questions;
+using SenBilirsin.Modules.Store;
 using SenBilirsin.Modules.Tournament;
 using SenBilirsin.Modules.Users;
 using SenBilirsin.Modules.Wallet;
@@ -21,6 +22,7 @@ builder.Services.AddCatalogModule();
 builder.Services.AddQuestionsModule();
 builder.Services.AddUsersModule();      // oyuncu adları (yalnızca okuma)
 builder.Services.AddWalletModule();
+builder.Services.AddStoreModule();       // kupon kodları şifreli; anahtar Coupons__EncryptionKey (mobil API ile aynı olmalı)
 builder.Services.AddTournamentModule(); // iş (dağıtım) mobil API'de çalışır; burada yalnızca yönetim
 
 // Zorluk/durum gibi sıralamalar JSON'da okunur metin olarak ("Easy", "Published") gider ve gelir
@@ -61,6 +63,7 @@ app.MapUploadEndpoints();
 app.MapCatalogAdminEndpoints();
 app.MapQuestionAdminEndpoints();
 app.MapTournamentAdminEndpoints();
+app.MapStoreAdminEndpoints();
 
 app.Run();
 return 0;
@@ -76,6 +79,7 @@ static class MigrationExtensions
         await services.MigrateUsersAsync();
         await services.MigrateWalletAsync();
         await services.MigrateTournamentAsync();
+        await services.MigrateStoreAsync();
     }
 }
 
